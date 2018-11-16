@@ -1,0 +1,29 @@
+{
+  "name": "snaptwitter2",
+  "version": "1.0.0",
+  "description": "Snap!Twitter provides access to the Twitter streaming API using the block-based programming language Snap! (http://snap.berkeley.edu)",
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "express-basic-auth": "^1.1.6",
+    "node-oauth": "^0.1.3",
+    "oauth": "^0.9.15",
+    "ringbufferjs": "^1.1.0",
+    "twit": "^2.2.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "snap",
+    "twitter",
+    "block-based",
+    "programming",
+    "data",
+    "analysis"
+  ],
+  "author": "Andreas Grillenberger",
+  "license": "ISC"
+}
