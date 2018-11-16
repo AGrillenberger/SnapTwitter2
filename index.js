@@ -93,6 +93,12 @@ setInterval(function() {
 }, 3000);
 
 // HTTP requests
+st.use('/snap', express.static('snap'));
+
+st.get('/', function(req, res) {
+  res.redirect('/snap');
+});
+
 st.get('/auth', function (req, res) {
   auth.getOAuthRequestToken(function (e, token, secret, results) {
     if (e) {
