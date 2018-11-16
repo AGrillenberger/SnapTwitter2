@@ -7,7 +7,7 @@ var fs = require('fs');
 // Prepare Application
 var st = express();
 st.locals.title = "Snap!Twitter"; // Application title
-st.locals.port = process.env.port || 3000;  // Listening port
+st.locals.port = 3000;  // Listening port
 st.locals.initStopped = false; // Should streams be stopped immediately after initializing?
 st.locals.bufferCap = 500; // buffer capacity
 st.locals.consoleStatus = true; // show console status
