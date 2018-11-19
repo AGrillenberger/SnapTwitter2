@@ -18,7 +18,7 @@ st.locals.twitterConsumerSecret = "FReiUGgu22cha3bGTCsVxQ6QdOJfsGPXpQ6YDO17V3yJg
 st.locals.twitterAccessToken = "";//10148652-dUJjL6ApsK9qoKT5kpb0OMgFiCdCzw84tjzTQFcY9";
 st.locals.twitterAccessTokenSecret = "";//LNhwvlNSKBZOpCcguMZOCdkB5TKdLubQRsxJKBaH3024F";
 st.locals.cookieSecret = "fgdsi6g76h6rg5<67rDGFDTZ(DF%/())";
-st.locals.useBasicAuth = false;
+st.locals.useBasicAuth = true;
 st.locals.validUsers = {
   test: "abc",
 }
