@@ -8,28 +8,33 @@ var fs = require('fs');
 var st = express();
 st.locals.title = "Snap!Twitter"; // Application title
 st.locals.port = process.env.PORT || 3000;  // Listening port
-st.locals.initStopped = false; // Should streams be stopped immediately after initializing?
-st.locals.bufferCap = 500; // buffer capacity
+st.locals.initStopped = true; // Should streams be stopped immediately after initializing?
+st.locals.bufferCap = 5; // buffer capacity
 st.locals.consoleStatus = true; // show console status
 st.locals.consoleStatusUpdateRate = 200; // console status update rate (ms)
-st.locals.waitBeforeDisconnect = 10000;
+st.locals.waitBeforeDisconnect = 1000;
 st.locals.twitterConsumerKey = "Fj14dVY1hLivGXPv2xD0TrYEU";
 st.locals.twitterConsumerSecret = "FReiUGgu22cha3bGTCsVxQ6QdOJfsGPXpQ6YDO17V3yJgRuQKM";
-st.locals.twitterAccessToken = "10148652-dUJjL6ApsK9qoKT5kpb0OMgFiCdCzw84tjzTQFcY9";
-st.locals.twitterAccessTokenSecret = "LNhwvlNSKBZOpCcguMZOCdkB5TKdLubQRsxJKBaH3024F";
+st.locals.twitterAccessToken = "";//10148652-dUJjL6ApsK9qoKT5kpb0OMgFiCdCzw84tjzTQFcY9";
+st.locals.twitterAccessTokenSecret = "";//LNhwvlNSKBZOpCcguMZOCdkB5TKdLubQRsxJKBaH3024F";
+st.locals.cookieSecret = "fgdsi6g76h6rg5<67rDGFDTZ(DF%/())";
+st.locals.useBasicAuth = false;
+st.locals.validUsers = {
+  test: "abc",
+}
 
 // CORS
 st.use(cors({origin: "*"}));
 
 // Authentication for app
-var basicAuth = require('express-basic-auth');
-st.use(basicAuth({
-  users: {
-    'test': 'abc',
-  },
-  challenge: true,
-  unauthorizedResponse: "unauthorized",
-}));
+if(st.locals.useBasicAuth) {
+  var basicAuth = require('express-basic-auth');
+  st.use(basicAuth({
+    challenge: true,
+    unauthorizedResponse: "unauthorized",
+    authorizer: myAuthorizer,
+  }));
+}
 
 // Prepare Twitter API
 var Twit = require('twit');
@@ -49,9 +54,18 @@ var auth = new OAuth(
   st.locals.twitterConsumerKey,
   st.locals.twitterConsumerSecret,
   '1.0',
-  'http://localhost:3000/auth/callback',
+  'http://localhost:3000/twitter/auth/callback',
   'HMAC-SHA1',
 );
+
+// prepare session store
+var session = require('express-session');
+st.use(session({
+  secret: st.locals.cookieSecret,
+  name: 'sessionId',
+  resave: false,
+  saveUninitialized: true,
+}));
 
 // Prepare tweet buffer
 var RingBuffer = require('ringbufferjs');
@@ -87,7 +101,7 @@ setInterval(function() {
 
 // check if buffer too empty
 setInterval(function() {
-  if(!st.locals.stream.streaming && (st.locals.buf.size() - 1) <= (st.locals.bufferCap/2)) {
+  if(st.locals.stream != null && !st.locals.stream.streaming && (st.locals.buf.size() - 1) <= (st.locals.bufferCap/2)) {
     st.locals.stream.startStream();
   }
 }, 3000);
@@ -99,7 +113,7 @@ st.get('/', function(req, res) {
   res.redirect('/snap');
 });
 
-st.get('/auth', function (req, res) {
+st.get('/twitter/auth', function (req, res) {
   auth.getOAuthRequestToken(function (e, token, secret, results) {
     if (e) {
       console.log("Error getting OAuth request token : " + util.inspect(e));
@@ -110,7 +124,7 @@ st.get('/auth', function (req, res) {
   });
 });
 
-st.get('/auth/callback', function(req, res){
+st.get('/twitter/auth/callback', function(req, res){
   auth.getOAuthAccessToken(
     st.locals.oauthRequestToken,
     st.locals.oauthRequestTokenSecret,
@@ -122,13 +136,13 @@ st.get('/auth/callback', function(req, res){
         st.locals.twitterAccessToken = oauthAccessToken;
         st.locals.twitterAccessTokenSecret = oauthAccessTokenSecret;
 
-        res.redirect("/auth/success");
+        res.redirect("/twitter/auth/success");
       }
     }
   );
 });
 
-st.get('/auth/success', function(req, res) {
+st.get('/twitter/auth/success', function(req, res) {
   res.send("authed");
   twitterInit();
 })
@@ -155,7 +169,7 @@ st.get('/twitter/get/complete', async (req, res) => {
   tweet = await getTweet();
   if(tweet === null) {
     res.status(444);
-    res.send("");
+    res.send("<a href=\"/twitter/auth\">Twitter authentication required</a>");
   } else {
     res.json(tweet);
   }
@@ -198,6 +212,9 @@ st.post('/json/get/attrib/:attrib', function (req, res) {
     res.send("err");
   } else {
     res.status(200);
+    if(attrib = "text") {
+      path[attrib] = path[attrib].replace("<","(").replace(">",")").replace(/(?:\r\n|\r|\n)/g, "<br />");
+    }
     res.json(path[attrib]);
   }
 })

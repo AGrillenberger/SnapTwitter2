@@ -141,6 +141,8 @@ SpriteMorph.prototype.categories =
         'other',
         'twitter',
         'map',
+        'chart',
+        'internal',
     ];
 
 SpriteMorph.prototype.blockColor = {
@@ -154,8 +156,10 @@ SpriteMorph.prototype.blockColor = {
     variables : new Color(243, 118, 29),
     lists : new Color(217, 77, 17),
     other: new Color(150, 150, 150),
-    twitter: new Color(0, 0, 255),
-    map: new Color(0,255,0),
+    twitter: new Color(2, 167, 196),
+    map: new Color(168, 110, 40),
+    chart: new Color(153,150,3),
+    internal: new Color(0,0,0),
 };
 
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);

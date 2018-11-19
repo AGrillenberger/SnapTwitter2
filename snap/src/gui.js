@@ -1035,6 +1035,8 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.silentSetWidth(this.paletteWidth);
 
     function addCategoryButton(category) {
+        if(category == "internal" && !window.location.search.includes("stdev"))
+          return;
         var labelWidth = 75,
             colors = [
                 myself.frameColor,
@@ -1672,6 +1674,7 @@ IDE_Morph.prototype.createCorral = function () {
     this.corral.add(frame);
 
     this.corral.fixLayout = function () {
+        this.setHeight(this.height())
         this.stageIcon.setCenter(this.center());
         this.stageIcon.setLeft(this.left() + padding);
         this.frame.setLeft(this.stageIcon.right() + padding);
@@ -1679,13 +1682,18 @@ IDE_Morph.prototype.createCorral = function () {
             this.right() - this.frame.left(),
             this.height()
         ));
+        this.stageIcon.setPosition(new Point(
+          this.stageIcon.left(),
+          this.bottom() - 2*this.stageIcon.height()
+        )
+        );
         this.arrangeIcons();
         this.refresh();
     };
 
     this.corral.arrangeIcons = function () {
         var x = this.frame.left(),
-            y = this.frame.top(),
+            y = this.frame.bottom()-2*this.stageIcon.height(),
             max = this.frame.right(),
             start = this.frame.left();
 
@@ -3549,7 +3557,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.2.2.7\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap!Twitter 2.0\n\nbased on\nSnap! 4.2.2.7\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2018 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'

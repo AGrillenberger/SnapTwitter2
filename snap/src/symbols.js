@@ -602,33 +602,54 @@ SymbolMorph.prototype.drawSymbolNormalStage = function (canvas, color) {
 
 SymbolMorph.prototype.drawSymbolTurtle = function (canvas, color) {
     // answer a canvas showing a turtle
-    var ctx = canvas.getContext('2d');
+    // var ctx = canvas.getContext('2d');
+    //
+    // ctx.fillStyle = color.toString();
+    // ctx.beginPath();
+    // ctx.moveTo(0, 0);
+    // ctx.lineTo(canvas.width, canvas.height / 2);
+    // ctx.lineTo(0, canvas.height);
+    // ctx.lineTo(canvas.height / 2, canvas.height / 2);
+    // ctx.closePath();
+    // ctx.fill();
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        r1 = h * 2 / 5,
+        r2 = h / 4,
+        r3 = h * 3 / 10,
+        r4 = h / 5;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width, canvas.height / 2);
-    ctx.lineTo(0, canvas.height);
-    ctx.lineTo(canvas.height / 2, canvas.height / 2);
+    ctx.arc(r2, h - r2, r2, radians(90), radians(259), false);
+    ctx.arc(w / 20 * 5, h / 9 * 4, r4, radians(165), radians(300), false);
+    ctx.arc(w / 20 * 11, r1, r1, radians(200), radians(357), false);
+    ctx.arc(w - r3, h - r3, r3, radians(269), radians(90), false);
     ctx.closePath();
     ctx.fill();
+
     return canvas;
 };
 
 SymbolMorph.prototype.drawSymbolTurtleOutline = function (canvas, color) {
     // answer a canvas showing a turtle
-    var ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        r1 = h * 2 / 5,
+        r2 = h / 4,
+        r3 = h * 3 / 10,
+        r4 = h / 5;
 
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width, canvas.height / 2);
-    ctx.lineTo(0, canvas.height);
-    ctx.lineTo(canvas.height / 2, canvas.height / 2);
+    ctx.arc(r2, h - r2, r2, radians(90), radians(259), false);
+    ctx.arc(w / 20 * 5, h / 9 * 4, r4, radians(165), radians(300), false);
+    ctx.arc(w / 20 * 11, r1, r1, radians(200), radians(357), false);
+    ctx.arc(w - r3, h - r3, r3, radians(269), radians(90), false);
     ctx.closePath();
     ctx.stroke();
-
-    return canvas;
 };
 
 SymbolMorph.prototype.drawSymbolPause = function (canvas, color) {
