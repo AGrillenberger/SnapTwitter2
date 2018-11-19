@@ -101,6 +101,8 @@ setInterval(function() {
 // HTTP requests
 st.use('/snap', express.static('snap'));
 
+st.use('/status', function(req,res) { res.send(req.protocol + '://' + req.get('host') + '/twitter/auth/callback'); })
+
 st.get('/', function(req, res) {
   res.redirect('/snap');
 });
@@ -112,7 +114,7 @@ st.get('/twitter/auth', function (req, res) {
     st.locals.twitterConsumerKey,
     st.locals.twitterConsumerSecret,
     '1.0',
-    req.protocol + '://' + req.get('host') + ":" + st.locals.port + '/twitter/auth/callback',
+    req.protocol + '://' + req.get('host') + '/twitter/auth/callback',
     'HMAC-SHA1',
   );
   console.log(req.protocol + '://' + req.get('host') + '/twitter/auth/callback');
