@@ -32,7 +32,6 @@ if(st.locals.useBasicAuth) {
   st.use(basicAuth({
     challenge: true,
     unauthorizedResponse: "unauthorized",
-    authorizer: myAuthorizer,
   }));
 }
 
