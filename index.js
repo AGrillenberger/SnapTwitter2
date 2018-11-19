@@ -48,15 +48,7 @@ if(st.locals.twitterAccessToken != "")
 
 // prepare OAuth
 var OAuth = require('oauth').OAuth;
-var auth = new OAuth(
-  'https://api.twitter.com/oauth/request_token',
-  'https://api.twitter.com/oauth/access_token',
-  st.locals.twitterConsumerKey,
-  st.locals.twitterConsumerSecret,
-  '1.0',
-  'http://localhost:3000/twitter/auth/callback',
-  'HMAC-SHA1',
-);
+var auth = null;
 
 // prepare session store
 var session = require('express-session');
@@ -114,6 +106,17 @@ st.get('/', function(req, res) {
 });
 
 st.get('/twitter/auth', function (req, res) {
+  auth = new OAuth(
+    'https://api.twitter.com/oauth/request_token',
+    'https://api.twitter.com/oauth/access_token',
+    st.locals.twitterConsumerKey,
+    st.locals.twitterConsumerSecret,
+    '1.0',
+    req.protocol + '://' + req.get('host') + ":" + st.locals.port + '/twitter/auth/callback',
+    'HMAC-SHA1',
+  );
+  console.log(req.protocol + '://' + req.get('host') + '/twitter/auth/callback');
+
   auth.getOAuthRequestToken(function (e, token, secret, results) {
     if (e) {
       console.log("Error getting OAuth request token : " + util.inspect(e));
