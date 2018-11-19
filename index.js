@@ -15,13 +15,10 @@ st.locals.consoleStatusUpdateRate = 200; // console status update rate (ms)
 st.locals.waitBeforeDisconnect = 1000;
 st.locals.twitterConsumerKey = "Fj14dVY1hLivGXPv2xD0TrYEU";
 st.locals.twitterConsumerSecret = "FReiUGgu22cha3bGTCsVxQ6QdOJfsGPXpQ6YDO17V3yJgRuQKM";
-st.locals.twitterAccessToken = "";//10148652-dUJjL6ApsK9qoKT5kpb0OMgFiCdCzw84tjzTQFcY9";
-st.locals.twitterAccessTokenSecret = "";//LNhwvlNSKBZOpCcguMZOCdkB5TKdLubQRsxJKBaH3024F";
+st.locals.twitterAccessToken = "10148652-dUJjL6ApsK9qoKT5kpb0OMgFiCdCzw84tjzTQFcY9";
+st.locals.twitterAccessTokenSecret = "LNhwvlNSKBZOpCcguMZOCdkB5TKdLubQRsxJKBaH3024F";
 st.locals.cookieSecret = "fgdsi6g76h6rg5<67rDGFDTZ(DF%/())";
 st.locals.useBasicAuth = true;
-st.locals.validUsers = {
-  test: "abc",
-}
 
 // CORS
 st.use(cors({origin: "*"}));
@@ -32,6 +29,7 @@ if(st.locals.useBasicAuth) {
   st.use(basicAuth({
     challenge: true,
     unauthorizedResponse: "unauthorized",
+    users: { 'test': 'abc' }
   }));
 }
 
