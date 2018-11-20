@@ -26,7 +26,7 @@ st.locals.useBasicAuth = true;
 st.use(cors({origin: "*"}));
 
 // Authentication for app
-if(st.locals.useBasicAuth) {
+if(st.locals.useBasicAuth) {, j
   var basicAuth = require('express-basic-auth');
   st.use(basicAuth({
     challenge: true,

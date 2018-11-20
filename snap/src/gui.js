@@ -622,7 +622,7 @@ IDE_Morph.prototype.createControlBar = function () {
         stageSizeButton,
         appModeButton,
         steppingButton,
-        cloudButton,
+        //cloudButton,
         x,
         colors = [
             this.groupColor,
@@ -898,7 +898,7 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.settingsButton = settingsButton; // for menu positioning
 
     // cloudButton
-    button = new PushButtonMorph(
+    /*button = new PushButtonMorph(
         this,
         'cloudMenu',
         new SymbolMorph('cloud', 11)
@@ -917,8 +917,9 @@ IDE_Morph.prototype.createControlBar = function () {
     // button.hint = 'cloud operations';
     button.fixLayout();
     cloudButton = button;
-    //this.controlBar.add(cloudButton);
-    //this.controlBar.cloudButton = cloudButton; // for menu positioning
+    this.controlBar.add(cloudButton);
+    this.controlBar.cloudButton = cloudButton; // for menu positioning
+*/
 
     this.controlBar.fixLayout = function () {
         x = this.right() - padding;
@@ -954,8 +955,8 @@ IDE_Morph.prototype.createControlBar = function () {
         settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(this.left());
 
-        cloudButton.setCenter(myself.controlBar.center());
-        cloudButton.setRight(settingsButton.left() - padding);
+      /*  cloudButton.setCenter(myself.controlBar.center());
+        cloudButton.setRight(settingsButton.left() - padding);*/
 
         projectButton.setCenter(myself.controlBar.center());
         projectButton.setRight(settingsButton.left() - padding);
@@ -2557,7 +2558,7 @@ IDE_Morph.prototype.snapMenu = function () {
     menu.popup(world, this.logo.bottomLeft());
 };
 
-IDE_Morph.prototype.cloudMenu = function () {
+/*IDE_Morph.prototype.cloudMenu = function () {
     var menu,
         myself = this,
         world = this.world(),
@@ -2697,7 +2698,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
     }
     menu.popup(world, pos);
-};
+};*/
 
 IDE_Morph.prototype.settingsMenu = function () {
     var menu,
@@ -4854,7 +4855,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     var world = this.world(),
         elements = [
             this.logo,
-            this.controlBar.cloudButton,
+            //this.controlBar.cloudButton,
             this.controlBar.projectButton,
             this.controlBar.settingsButton,
             this.controlBar.steppingButton,
