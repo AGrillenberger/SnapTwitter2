@@ -3341,7 +3341,7 @@ InputFieldMorph.prototype.drawRectBorder = function (context) {
 };
 
 // PianoMenuMorph //////////////////////////////////////////////////////
-/* 
+/*
     I am a menu that looks like a piano keyboard.
 */
 

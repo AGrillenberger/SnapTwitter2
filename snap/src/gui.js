@@ -198,7 +198,7 @@ IDE_Morph.prototype.scriptsTexture = function () {
     return pic;
 };
 
-IDE_Morph.prototype.setDefaultDesign();
+IDE_Morph.prototype.setFlatDesign();
 
 // IDE_Morph instance creation:
 
@@ -268,6 +268,16 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
+
+    // load SnapTwitter
+    this.getURL(
+        this.resourceURL('SnapTwitter', 'st2-project.xml'),
+        function (txt) {
+            this.droppedText(txt, 'Snap!Twitter example project');
+        }
+    );
+
+    this.setFlatDesign();
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -612,7 +622,7 @@ IDE_Morph.prototype.createControlBar = function () {
         stageSizeButton,
         appModeButton,
         steppingButton,
-        cloudButton,
+        //cloudButton,
         x,
         colors = [
             this.groupColor,
@@ -888,7 +898,7 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.settingsButton = settingsButton; // for menu positioning
 
     // cloudButton
-    button = new PushButtonMorph(
+    /*button = new PushButtonMorph(
         this,
         'cloudMenu',
         new SymbolMorph('cloud', 11)
@@ -909,6 +919,7 @@ IDE_Morph.prototype.createControlBar = function () {
     cloudButton = button;
     this.controlBar.add(cloudButton);
     this.controlBar.cloudButton = cloudButton; // for menu positioning
+*/
 
     this.controlBar.fixLayout = function () {
         x = this.right() - padding;
@@ -944,11 +955,11 @@ IDE_Morph.prototype.createControlBar = function () {
         settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(this.left());
 
-        cloudButton.setCenter(myself.controlBar.center());
-        cloudButton.setRight(settingsButton.left() - padding);
+      /*  cloudButton.setCenter(myself.controlBar.center());
+        cloudButton.setRight(settingsButton.left() - padding);*/
 
         projectButton.setCenter(myself.controlBar.center());
-        projectButton.setRight(cloudButton.left() - padding);
+        projectButton.setRight(settingsButton.left() - padding);
 
         this.refreshSlider();
         this.updateLabel();
@@ -1025,6 +1036,8 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.silentSetWidth(this.paletteWidth);
 
     function addCategoryButton(category) {
+        if(category == "internal" && !window.location.search.includes("stdev"))
+          return;
         var labelWidth = 75,
             colors = [
                 myself.frameColor,
@@ -1662,6 +1675,7 @@ IDE_Morph.prototype.createCorral = function () {
     this.corral.add(frame);
 
     this.corral.fixLayout = function () {
+        this.setHeight(this.height())
         this.stageIcon.setCenter(this.center());
         this.stageIcon.setLeft(this.left() + padding);
         this.frame.setLeft(this.stageIcon.right() + padding);
@@ -1669,13 +1683,18 @@ IDE_Morph.prototype.createCorral = function () {
             this.right() - this.frame.left(),
             this.height()
         ));
+        this.stageIcon.setPosition(new Point(
+          this.stageIcon.left(),
+          this.bottom() - 2*this.stageIcon.height()
+        )
+        );
         this.arrangeIcons();
         this.refresh();
     };
 
     this.corral.arrangeIcons = function () {
         var x = this.frame.left(),
-            y = this.frame.top(),
+            y = this.frame.bottom()-2*this.stageIcon.height(),
             max = this.frame.right(),
             start = this.frame.left();
 
@@ -2539,7 +2558,7 @@ IDE_Morph.prototype.snapMenu = function () {
     menu.popup(world, this.logo.bottomLeft());
 };
 
-IDE_Morph.prototype.cloudMenu = function () {
+/*IDE_Morph.prototype.cloudMenu = function () {
     var menu,
         myself = this,
         world = this.world(),
@@ -2679,7 +2698,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
     }
     menu.popup(world, pos);
-};
+};*/
 
 IDE_Morph.prototype.settingsMenu = function () {
     var menu,
@@ -3119,7 +3138,23 @@ IDE_Morph.prototype.projectMenu = function () {
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
-    menu.addPair('New', 'createNewProject', '^N');
+    menu.addPair('New example project', function() {
+      this.confirm(
+          'Replace the current project with a new one?',
+          'New Project',
+          function () {
+            myself.getURL(
+              myself.resourceURL('SnapTwitter', 'st2-project.xml'),
+              function (txt) {
+                  myself.droppedText(txt, 'Snap!Twitter example project');
+              }
+            );
+          }
+      );
+    });
+    menu.addPair('New empty project', function() {
+      myself.createNewProject();
+    }, '^N');
     menu.addPair('Open...', 'openProjectsBrowser', '^O');
     menu.addPair('Save', "save", '^S');
     menu.addItem('Save As...', 'saveProjectsBrowser');
@@ -3539,7 +3574,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.2.2.7\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap!Twitter 2.0\n\nbased on\nSnap! 4.2.2.7\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2018 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -4820,7 +4855,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     var world = this.world(),
         elements = [
             this.logo,
-            this.controlBar.cloudButton,
+            //this.controlBar.cloudButton,
             this.controlBar.projectButton,
             this.controlBar.settingsButton,
             this.controlBar.steppingButton,
@@ -4839,8 +4874,8 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
 
     Morph.prototype.trackChanges = false;
     if (this.isAppMode) {
-		this.wasSingleStepping = Process.prototype.enableSingleStepping;
-		if (this.wasSingleStepping) {
+		    this.wasSingleStepping = Process.prototype.enableSingleStepping;
+		  if (this.wasSingleStepping) {
      		this.toggleSingleStepping();
     	}
         this.setColor(this.appModeColor);
@@ -4857,6 +4892,10 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         if (world.keyboardReceiver instanceof ScriptFocusMorph) {
             world.keyboardReceiver.stopEditing();
         }
+        if(document.getElementById("plotly_div") != null)
+          document.getElementById("plotly_div").style.display = "none";
+          if(document.getElementById("leaflet_div") != null)
+            document.getElementById("leaflet_div").style.display = "none";
     } else {
         if (this.wasSingleStepping && !Process.prototype.enableSingleStepping) {
              this.toggleSingleStepping();
@@ -4890,6 +4929,14 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         }
         // update undrop controls
         this.currentSprite.scripts.updateToolbar();
+        if(document.getElementById("plotly_div") != null)
+          document.getElementById("plotly_div").style.display = "block";
+        if(document.getElementById("leaflet_div") != null)
+          document.getElementById("leaflet_div").style.display = "block";
+        if(typeof plotlyResize !== "undefined")
+          plotlyResize(stage);
+        if(typeof leafletResize !== "undefined")
+          leafletResize(stage);
     }
     this.setExtent(this.world().extent()); // resume trackChanges
 };
@@ -4946,6 +4993,11 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
     } else {
         zoomTo(1);
     }
+
+    if(typeof plotlyResize !== "undefined")
+      plotlyResize(stage);
+    if(typeof leafletResize !== "undefined")
+      leafletResize(stage);
 };
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
@@ -4971,7 +5023,14 @@ IDE_Morph.prototype.createNewProject = function () {
     this.confirm(
         'Replace the current project with a new one?',
         'New Project',
-        function () {myself.newProject(); }
+        function () {
+          myself.newProject();
+          myself.getURL(
+            myself.resourceURL('SnapTwitter', 'st2-blocks.xml'),
+            function (txt) {
+                myself.droppedText(txt, 'Snap!Twitter blocks');
+            }
+          );}
     );
 };
 
@@ -9048,6 +9107,11 @@ StageHandleMorph.prototype.fixLayout = function () {
     this.setTop(this.target.top() + 10);
     this.setRight(this.target.left());
     if (ide) {ide.add(this); } // come to front
+
+    if(typeof plotlyResize !== "undefined")
+      plotlyResize(stage);
+    if(typeof leafletResize !== "undefined")
+      leafletResize(stage);
 };
 
 // StageHandleMorph stepping:
