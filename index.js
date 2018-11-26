@@ -94,6 +94,8 @@ setInterval(function() {
 // HTTP requests
 st.use('/snap', express.static('snap'));
 
+st.use('/libraries', express.static('libraries'));
+
 st.use('/status', express.static('statuspage.html'));
 
 st.use('/getStatus', function(req,res) {
