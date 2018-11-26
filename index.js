@@ -97,8 +97,9 @@ st.use('/snap', express.static('snap'));
 st.use('/status', express.static('statuspage.html'));
 
 st.use('/getStatus', function(req,res) {
-  var status = res.json(statusJSON());
+  var status = statusJSON();
   status.url = req.get('host');
+  res.json(status);
 })
 
 
