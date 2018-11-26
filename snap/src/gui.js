@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-November-13';
+modules.gui = '2018-November-21';
 
 // Declarations
 
@@ -3574,7 +3574,11 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
+<<<<<<< HEAD
     aboutTxt = 'Snap!Twitter 2.0\n\nbased on\nSnap! 4.2.2.7\nBuild Your Own Blocks\n\n'
+=======
+    aboutTxt = 'Snap! 4.2.2.8\nBuild Your Own Blocks\n\n'
+>>>>>>> 0b1448b6779e1d0c58ba6096eba8bcb317ac4aa3
         + 'Copyright \u24B8 2018 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
