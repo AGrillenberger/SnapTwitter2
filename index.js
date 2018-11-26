@@ -94,7 +94,12 @@ setInterval(function() {
 // HTTP requests
 st.use('/snap', express.static('snap'));
 
-st.use('/getStatus', function(req,res) { res.json(statusJSON()); })
+st.use('/status', express.static('statuspage.html'));
+
+st.use('/getStatus', function(req,res) {
+  var status = res.json(statusJSON());
+  status.url = req.get('host');
+})
 
 
 st.get('/', function(req, res) {
@@ -351,7 +356,7 @@ function status() {
 
 function statusJSON() {
   return {
-    init:       false,
+    init:       st.locals.stream != null,
     hostname:   os.hostname(),
     port:       st.locals.port,
     received:   st.locals.tweetsReceived,

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Snap!Twitter status</title>
+    <script src="snap/SnapTwitter/plotly/plotly.min.js"></script>
+  </head>
+<body>
+  <h1>Snap!Twitter - status</h1>
+  <table>
+    <tr><th>Hostname</th><td id="status-hostname"></td></tr>
+    <tr><th>Port</th><td id="status-port"></td></tr>
+    <tr><th>URL</th><td id="status-url"></td></tr>
+    <tr><th>Authenticated</th><td id="status-authed"></td></tr>
+    <tr><th>Streaming</th><td id="status-streaming"></td></tr>
+    <tr><th>Tweets received</th><td id="status-rec"></td></tr>
+    <tr><th>Tweets processed</th><td id="status-proc"></td></tr>
+    <tr><th>Buffer</th><td id="status-buf"></td></tr>
+  </table>
+  <div id="plot"></div>
+
+  <script>
+    currentStatus = null;
+
+    getStatus();
+    setInterval(function() {
+      getStatus();
+    }, 500);
+
+    function getStatus() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          currentStatus = JSON.parse(this.responseText);
+          refreshStatus();
+        }
+      };
+      xhttp.open("GET", "/getStatus", true);
+      xhttp.send();
+    }
+
+    function refreshStatus() {
+      document.getElementById("status-hostname").innerHTML = currentStatus.hostname;
+      document.getElementById("status-url").innerHTML = currentStatus.url;
+      document.getElementById("status-port").innerHTML = currentStatus.port;
+      document.getElementById("status-authed").innerHTML = "" + currentStatus.init + (!currentStatus.init ? " (--> <a href=\"/twitter/auth\">Twitter auth</a>)":"");
+      document.getElementById("status-streaming").innerHTML = currentStatus.streaming;
+      document.getElementById("status-rec").innerHTML = currentStatus.received;
+      document.getElementById("status-proc").innerHTML = currentStatus.processed;
+      document.getElementById("status-buf").innerHTML = "" + currentStatus.bufferSize + "/" + currentStatus.bufferCap;
+
+      var data = [{
+        values: [currentStatus.received, currentStatus.processed, currentStatus.bufferSize],
+        labels: ['received', 'processed', 'buffered'],
+        marker: {
+          colors: ["rgb(255,128,0)", "rgb(76,153,0)", "rgb(160,160,160)"],
+        },
+        textinfo: 'label+value',
+        type: 'pie'
+      }];
+
+      var layout = {
+        height: 400,
+        width: 500
+      };
+
+      Plotly.newPlot('plot', data, layout, {displayModeBar: false});
+    }
+  </script>
+</body>
+</html>
