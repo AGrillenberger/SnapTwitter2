@@ -94,7 +94,8 @@ setInterval(function() {
 // HTTP requests
 st.use('/snap', express.static('snap'));
 
-st.use('/status', function(req,res) { res.send(status); })
+st.use('/getStatus', function(req,res) { res.json(statusJSON()); })
+
 
 st.get('/', function(req, res) {
   res.redirect('/snap');
@@ -346,4 +347,18 @@ function status() {
   } else {
     return "\rReceived: "+ st.locals.tweetsReceived + " | Requested: "+ st.locals.tweetsRequested + " | Buffer: " + st.locals.buf.size() + "/" + st.locals.bufferCap + (st.locals.stream.streaming ? " | streaming" : " | stopped    ");
   }
+}
+
+function statusJSON() {
+  return {
+    init:       false,
+    hostname:   os.hostname(),
+    port:       st.locals.port,
+    received:   st.locals.tweetsReceived,
+    streaming:  st.locals.stream.streaming,
+    processed:  st.locals.tweetsRequested,
+    bufferSize: st.locals.buf.size(),
+    bufferCap:  st.locals.bufferCap,
+  };
+  return ret;
 }
