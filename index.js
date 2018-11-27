@@ -31,7 +31,7 @@ if(st.locals.useBasicAuth) {
   st.use(basicAuth({
     challenge: true,
     unauthorizedResponse: "unauthorized",
-    users: { 'test': 'abc' }
+    users: { 'FU-DDI': 'gdi1' }
   }));
 }
 
