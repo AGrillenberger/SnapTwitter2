@@ -650,6 +650,8 @@ SymbolMorph.prototype.drawSymbolTurtleOutline = function (canvas, color) {
     ctx.arc(w - r3, h - r3, r3, radians(269), radians(90), false);
     ctx.closePath();
     ctx.stroke();
+
+    return canvas;
 };
 
 SymbolMorph.prototype.drawSymbolPause = function (canvas, color) {
