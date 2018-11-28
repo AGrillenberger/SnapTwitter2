@@ -219,7 +219,7 @@ st.post('/json/get/attrib/:attrib', function (req, res) {
     res.send("err");
   } else {
     res.status(200);
-    if(attrib = "text") {
+    if(attrib == "text") {
       path[attrib] = path[attrib].replace("<","(").replace(">",")").replace(/(?:\r\n|\r|\n)/g, "<br />");
     }
     res.json(path[attrib]);
