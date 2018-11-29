@@ -10,17 +10,17 @@ require('dotenv').config();
 var st = express();
 st.locals.title = "Snap!Twitter"; // Application title
 st.locals.port = process.env.PORT || 3000;  // Listening port
-st.locals.initStopped = true; // Should streams be stopped immediately after initializing?
-st.locals.bufferCap = 500; // buffer capacity
+st.locals.initStopped = process.env.INITSTOPPED || true; // Should streams be stopped immediately after initializing?
+st.locals.bufferCap = process.env.BUFCAP || 500; // buffer capacity
 st.locals.consoleStatus = true; // show console status
 st.locals.consoleStatusUpdateRate = 200; // console status update rate (ms)
-st.locals.waitBeforeDisconnect = 1000;
+st.locals.waitBeforeDisconnect = process.env.WAITBEFOREDISCONNECT || 1000;
 st.locals.twitterConsumerKey = process.env.CONSUMERKEY;
 st.locals.twitterConsumerSecret = process.env.CONSUMERSECRET;
 st.locals.twitterAccessToken = process.env.ACCESSTOKEN;
 st.locals.twitterAccessTokenSecret = process.env.ACCESSTOKENSECRET;
 st.locals.cookieSecret = process.env.COOKIESECRET;
-st.locals.useBasicAuth = true;
+st.locals.useBasicAuth = process.env.USEBASICAUTH || true;
 
 // CORS
 st.use(cors({origin: "*"}));
