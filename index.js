@@ -11,7 +11,7 @@ var st = express();
 st.locals.title = "Snap!Twitter"; // Application title
 st.locals.port = process.env.PORT || 3000;  // Listening port
 st.locals.initStopped = process.env.INITSTOPPED || true; // Should streams be stopped immediately after initializing?
-st.locals.bufferCap = process.env.BUFCAP || 500; // buffer capacity
+st.locals.bufferCap = parseInt(process.env.BUFCAP) || 500; // buffer capacity
 st.locals.consoleStatus = true; // show console status
 st.locals.consoleStatusUpdateRate = 200; // console status update rate (ms)
 st.locals.waitBeforeDisconnect = process.env.WAITBEFOREDISCONNECT || 10000;
@@ -27,12 +27,20 @@ st.use(cors({origin: "*"}));
 
 // Authentication for app
 if(st.locals.useBasicAuth) {
+  var users = (process.env.USERS !== undefined) ? JSON.parse(process.env.USERS) : { 'FU-DDI': 'gdi1' }
+  console.log("US:" + users);
   var basicAuth = require('express-basic-auth');
   st.use(basicAuth({
     challenge: true,
     unauthorizedResponse: "unauthorized",
-    users: { 'FU-DDI': 'gdi1' }
+    users: users
   }));
+}
+
+// if no keys: exit
+if(st.locals.twitterConsumerKey == "" || st.locals.twitterConsumerSecret == "") {
+  console.log("Twitter consumer key and secret have to be defined!");
+  exit(1);
 }
 
 // Prepare Twitter API
@@ -86,7 +94,7 @@ setInterval(function() {
 
 // check if buffer too empty
 setInterval(function() {
-  if(st.locals.stream != null && !st.locals.stream.streaming && (st.locals.buf.size() - 1) <= (st.locals.bufferCap/2)) {
+  if(st.locals.stream != null && !st.locals.stream.streaming && (st.locals.buf.size() - 1) <= (st.locals.buf.capacity()/2)) {
     st.locals.stream.startStream();
   }
 }, 3000);
@@ -353,7 +361,7 @@ function status() {
     return "\rStream has not been initialized yet, please go to http://" + os.hostname() + ":" + st.locals.port + "/twitter/auth for authentication.";
     return ret;
   } else {
-    return "\rReceived: "+ st.locals.tweetsReceived + " | Requested: "+ st.locals.tweetsRequested + " | Buffer: " + st.locals.buf.size() + "/" + st.locals.bufferCap + (st.locals.stream.streaming ? " | streaming" : " | stopped    ");
+    return "\rReceived: "+ st.locals.tweetsReceived + " | Requested: "+ st.locals.tweetsRequested + " | Buffer: " + st.locals.buf.size() + "/" + st.locals.buf.capacity() + (st.locals.stream.streaming ? " | streaming" : " | stopped    ");
   }
 }
 
@@ -366,7 +374,7 @@ function statusJSON() {
     streaming:  st.locals.stream.streaming,
     processed:  st.locals.tweetsRequested,
     bufferSize: st.locals.buf.size(),
-    bufferCap:  st.locals.bufferCap,
+    bufferCap:  st.locals.buf.capacity(),
   };
   return ret;
 }
