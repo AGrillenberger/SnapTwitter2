@@ -28,7 +28,6 @@ st.use(cors({origin: "*"}));
 // Authentication for app
 if(st.locals.useBasicAuth) {
   var users = (process.env.USERS !== undefined) ? JSON.parse(process.env.USERS) : { 'FU-DDI': 'gdi1' }
-  console.log("US:" + users);
   var basicAuth = require('express-basic-auth');
   st.use(basicAuth({
     challenge: true,
