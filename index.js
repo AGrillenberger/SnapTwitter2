@@ -191,7 +191,6 @@ st.get('/twitter/get/complete', async (req, res) => {
 
 st.get('/twitter/get/attrib/:attrib', async (req, res) => {
   tweet = await getTweet();
-  console.log(tweet.getAttribute("text"));
   if(tweet === null) {
     res.status(444);
     res.send("");
@@ -314,7 +313,7 @@ function twitterInit() {
     if(st.locals.stream.streaming)
       return;
 
-    console.log(Date.now() - st.locals.lastStop);
+    //console.log(Date.now() - st.locals.lastStop);
     while((Date.now() - st.locals.lastStop) < 5000)
       return;
 
