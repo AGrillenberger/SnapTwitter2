@@ -4,6 +4,10 @@ var util = require('util');
 var https = require('https');
 var fs = require('fs');
 var os = require('os');
+const { Client } = require('pg');
+var uniqid = require('uniqid');
+var md5 = require('md5');
+
 require('dotenv').config();
 
 // Prepare Application
@@ -21,6 +25,21 @@ st.locals.twitterAccessToken = process.env.ACCESSTOKEN;
 st.locals.twitterAccessTokenSecret = process.env.ACCESSTOKENSECRET;
 st.locals.cookieSecret = process.env.COOKIESECRET;
 st.locals.useBasicAuth = process.env.USEBASICAUTH || true;
+
+// Database
+var instanceId = uniqid();
+const db = new Client({
+  connectionString: process.env.DATABASE_URL,
+});
+db.connect();
+db.query("INSERT INTO sysevents(type,instanceid) VALUES ('startup',$1);",[instanceId])
+
+process.on('SIGINT', function() {
+  console.log("Caught interrupt signal");
+  db.query("INSERT INTO sysevents(type,instanceid) VALUES ('shutdown',$1);",[instanceId], (err,res) => {
+    process.exit();
+  });
+});
 
 // CORS
 st.use(cors({origin: "*"}));
@@ -198,6 +217,7 @@ st.get('/twitter/get/attrib/:attrib', async (req, res) => {
     res.status(404);
     res.send("");
   } else {
+    db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ($1,$2);",[req.params.attrib,clientId(req)]);
     res.json(tweet[req.params.attrib]);
   }
 })
@@ -225,6 +245,7 @@ st.post('/json/get/attrib/:attrib', function (req, res) {
     res.send("err");
   } else {
     res.status(200);
+    db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ($1,$2);",[req.params.attrib,clientId(req)]);
     if(attrib == "text") {
       path[attrib] = path[attrib].replace("<","(").replace(">",")").replace(/(?:\r\n|\r|\n)/g, "<br />");
     }
@@ -375,4 +396,9 @@ function statusJSON() {
     bufferCap:  st.locals.buf.capacity(),
   };
   return ret;
+}
+
+function clientId(req) {
+  var client = req.headers['user-agent'] + req.connection.remoteAddress;
+  return md5(client);
 }
