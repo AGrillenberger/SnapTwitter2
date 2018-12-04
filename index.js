@@ -258,6 +258,7 @@ st.post('/json/get/geo', function (req, res) {
     res.send(req.body.geo.coordinates[0]+";"+req.body.geo.coordinates[1]);
     return;
   }
+  db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ('geo',$1);",[clientId(req)]);
   var place = req.body.place;
   if(place != null && place.bounding_box != null && place.bounding_box.coordinates != null && place.bounding_box.coordinates[0] != null) {
     //calculate mid of bounding bounding_box
