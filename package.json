@@ -9,9 +9,12 @@
     "express": "^4.16.4",
     "express-basic-auth": "^1.1.6",
     "express-session": "^1.15.6",
+    "md5": "^2.2.1",
     "oauth": "^0.9.15",
+    "pg": "^7.7.1",
     "ringbufferjs": "^1.1.0",
-    "twit": "^2.2.11"
+    "twit": "^2.2.11",
+    "uniqid": "^5.0.3"
   },
   "devDependencies": {},
   "scripts": {

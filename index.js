@@ -4,35 +4,61 @@ var util = require('util');
 var https = require('https');
 var fs = require('fs');
 var os = require('os');
+const { Client } = require('pg');
+var uniqid = require('uniqid');
+var md5 = require('md5');
+
 require('dotenv').config();
 
 // Prepare Application
 var st = express();
 st.locals.title = "Snap!Twitter"; // Application title
 st.locals.port = process.env.PORT || 3000;  // Listening port
-st.locals.initStopped = true; // Should streams be stopped immediately after initializing?
-st.locals.bufferCap = 500; // buffer capacity
+st.locals.initStopped = process.env.INITSTOPPED || true; // Should streams be stopped immediately after initializing?
+st.locals.bufferCap = parseInt(process.env.BUFCAP) || 500; // buffer capacity
 st.locals.consoleStatus = true; // show console status
 st.locals.consoleStatusUpdateRate = 200; // console status update rate (ms)
-st.locals.waitBeforeDisconnect = 1000;
+st.locals.waitBeforeDisconnect = process.env.WAITBEFOREDISCONNECT || 10000;
 st.locals.twitterConsumerKey = process.env.CONSUMERKEY;
 st.locals.twitterConsumerSecret = process.env.CONSUMERSECRET;
 st.locals.twitterAccessToken = process.env.ACCESSTOKEN;
 st.locals.twitterAccessTokenSecret = process.env.ACCESSTOKENSECRET;
 st.locals.cookieSecret = process.env.COOKIESECRET;
-st.locals.useBasicAuth = true;
+st.locals.useBasicAuth = process.env.USEBASICAUTH || true;
+
+// Database
+var instanceId = uniqid();
+const db = new Client({
+  connectionString: process.env.DATABASE_URL,
+});
+db.connect();
+db.query("INSERT INTO sysevents(type,instanceid) VALUES ('startup',$1);",[instanceId])
+
+process.on('SIGINT', function() {
+  console.log("Caught interrupt signal");
+  db.query("INSERT INTO sysevents(type,instanceid) VALUES ('shutdown',$1);",[instanceId], (err,res) => {
+    process.exit();
+  });
+});
 
 // CORS
 st.use(cors({origin: "*"}));
 
 // Authentication for app
 if(st.locals.useBasicAuth) {
+  var users = (process.env.USERS !== undefined) ? JSON.parse(process.env.USERS) : { 'FU-DDI': 'gdi1' }
   var basicAuth = require('express-basic-auth');
   st.use(basicAuth({
     challenge: true,
     unauthorizedResponse: "unauthorized",
-    users: { 'FU-DDI': 'gdi1' }
+    users: users
   }));
+}
+
+// if no keys: exit
+if(st.locals.twitterConsumerKey == "" || st.locals.twitterConsumerSecret == "") {
+  console.log("Twitter consumer key and secret have to be defined!");
+  exit(1);
 }
 
 // Prepare Twitter API
@@ -86,7 +112,7 @@ setInterval(function() {
 
 // check if buffer too empty
 setInterval(function() {
-  if(st.locals.stream != null && !st.locals.stream.streaming && (st.locals.buf.size() - 1) <= (st.locals.bufferCap/2)) {
+  if(st.locals.stream != null && !st.locals.stream.streaming && (st.locals.buf.size() - 1) <= (st.locals.buf.capacity()/2)) {
     st.locals.stream.startStream();
   }
 }, 3000);
@@ -184,7 +210,6 @@ st.get('/twitter/get/complete', async (req, res) => {
 
 st.get('/twitter/get/attrib/:attrib', async (req, res) => {
   tweet = await getTweet();
-  console.log(tweet.getAttribute("text"));
   if(tweet === null) {
     res.status(444);
     res.send("");
@@ -192,6 +217,7 @@ st.get('/twitter/get/attrib/:attrib', async (req, res) => {
     res.status(404);
     res.send("");
   } else {
+    db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ($1,$2);",[req.params.attrib,clientId(req)]);
     res.json(tweet[req.params.attrib]);
   }
 })
@@ -219,6 +245,7 @@ st.post('/json/get/attrib/:attrib', function (req, res) {
     res.send("err");
   } else {
     res.status(200);
+    db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ($1,$2);",[req.params.attrib,clientId(req)]);
     if(attrib == "text") {
       path[attrib] = path[attrib].replace("<","(").replace(">",")").replace(/(?:\r\n|\r|\n)/g, "<br />");
     }
@@ -231,6 +258,7 @@ st.post('/json/get/geo', function (req, res) {
     res.send(req.body.geo.coordinates[0]+";"+req.body.geo.coordinates[1]);
     return;
   }
+  db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ('geo',$1);",[clientId(req)]);
   var place = req.body.place;
   if(place != null && place.bounding_box != null && place.bounding_box.coordinates != null && place.bounding_box.coordinates[0] != null) {
     //calculate mid of bounding bounding_box
@@ -307,7 +335,7 @@ function twitterInit() {
     if(st.locals.stream.streaming)
       return;
 
-    console.log(Date.now() - st.locals.lastStop);
+    //console.log(Date.now() - st.locals.lastStop);
     while((Date.now() - st.locals.lastStop) < 5000)
       return;
 
@@ -353,7 +381,7 @@ function status() {
     return "\rStream has not been initialized yet, please go to http://" + os.hostname() + ":" + st.locals.port + "/twitter/auth for authentication.";
     return ret;
   } else {
-    return "\rReceived: "+ st.locals.tweetsReceived + " | Requested: "+ st.locals.tweetsRequested + " | Buffer: " + st.locals.buf.size() + "/" + st.locals.bufferCap + (st.locals.stream.streaming ? " | streaming" : " | stopped    ");
+    return "\rReceived: "+ st.locals.tweetsReceived + " | Requested: "+ st.locals.tweetsRequested + " | Buffer: " + st.locals.buf.size() + "/" + st.locals.buf.capacity() + (st.locals.stream.streaming ? " | streaming" : " | stopped    ");
   }
 }
 
@@ -366,7 +394,12 @@ function statusJSON() {
     streaming:  st.locals.stream.streaming,
     processed:  st.locals.tweetsRequested,
     bufferSize: st.locals.buf.size(),
-    bufferCap:  st.locals.bufferCap,
+    bufferCap:  st.locals.buf.capacity(),
   };
   return ret;
+}
+
+function clientId(req) {
+  var client = req.headers['user-agent'] + req.connection.remoteAddress;
+  return md5(client);
 }
