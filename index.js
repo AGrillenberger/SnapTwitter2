@@ -32,7 +32,7 @@ const db = new Client({
   connectionString: process.env.DATABASE_URL,
 });
 db.connect();
-db.query("INSERT INTO sysevents(type,instanceid) VALUES ('startup',$1);",[instanceId])
+db.query("INSERT INTO sysevents(type,instanceid) VALUES ('startup',$1);",[instanceId]);
 
 process.on('SIGINT', function() {
   console.log("Caught interrupt signal");
@@ -46,7 +46,7 @@ st.use(cors({origin: "*"}));
 
 // Authentication for app
 if(st.locals.useBasicAuth) {
-  var users = (process.env.USERS !== undefined) ? JSON.parse(process.env.USERS) : { 'FU-DDI': 'gdi1' }
+  var users = (process.env.USERS !== undefined) ? JSON.parse(process.env.USERS) : { 'demo': 'demo' };
   var basicAuth = require('express-basic-auth');
   st.use(basicAuth({
     challenge: true,
@@ -63,13 +63,19 @@ if(st.locals.twitterConsumerKey == "" || st.locals.twitterConsumerSecret == "") 
 
 // Prepare Twitter API
 var Twit = require('twit');
-st.locals.T = null;
-st.locals.stream = null;
-st.locals.lastRequest = Date.now();
+var Twitter = {};
+Twitter.T = null;
+Twitter.stream = null;
+Twitter.lastRequest = Date.now()
 
 // if hardcoded access token: init Twitter API
 if(st.locals.twitterAccessToken != "")
   twitterInit();
+
+// Chunked streaming APIs
+var chunked = require("chunked-http");
+var Chunked = {};
+Chunked.streams = {};
 
 // prepare OAuth
 var OAuth = require('oauth').OAuth;
@@ -84,13 +90,14 @@ st.use(session({
   saveUninitialized: true,
 }));
 
-// Prepare tweet buffer
+// Prepare buffers
 var RingBuffer = require('ringbufferjs');
-st.locals.buf = new RingBuffer(st.locals.bufferCap);
+Twitter.buffer = new RingBuffer(st.locals.bufferCap);
+Chunked.buffers = {}
 
 // Console status output
-st.locals.tweetsReceived = 0;
-st.locals.tweetsRequested = 0;
+Twitter.tweetsReceived = 0;
+Twitter.tweetsRequested = 0;
 if(st.locals.consoleStatus) {
   setInterval(function() { process.stdout.write(status()); }, st.locals.consoleStatusUpdateRate);
 }
@@ -106,18 +113,22 @@ st.listen(st.locals.port, function () {
 
 // Pause stream when buffer full
 setInterval(function() {
-  if(st.locals.stream != null && st.locals.stream.streaming && (Date.now() - st.locals.lastRequest) > st.locals.waitBeforeDisconnect && st.locals.buf.size() == st.locals.buf.capacity())
-    st.locals.stream.stopStream();
+  if(Twitter.stream != null && Twitter.stream.streaming && (Date.now() - Twitter.lastRequest) > st.locals.waitBeforeDisconnect && Twitter.buffer.size() == Twitter.buffer.capacity())
+    Twitter.stream.stopStream();
 }, 1000);
 
 // check if buffer too empty
 setInterval(function() {
-  if(st.locals.stream != null && !st.locals.stream.streaming && (st.locals.buf.size() - 1) <= (st.locals.buf.capacity()/2)) {
-    st.locals.stream.startStream();
+  if(Twitter.stream != null && !Twitter.stream.streaming && (Twitter.buffer.size() - 1) <= (Twitter.buffer.capacity()/2)) {
+    Twitter.stream.startStream();
   }
 }, 3000);
 
 // HTTP requests
+var bodyParser = require('body-parser');
+st.use(bodyParser.urlencoded({ extended: true }));
+st.use(bodyParser.json());
+
 st.use('/snap', express.static('snap'));
 
 st.use('/libraries', express.static('libraries'));
@@ -128,11 +139,75 @@ st.use('/getStatus', function(req,res) {
   var status = statusJSON();
   status.url = req.get('host');
   res.json(status);
-})
+});
 
 
 st.get('/', function(req, res) {
   res.redirect('/snap');
+});
+
+st.post('/chunkedstream/:name/start', function (req, res) {
+  // expects url as postdata
+  url = req.body.url;
+  if(!url || url.length < 10) {
+    res.status(404);
+    res.send("invalid url (should be submitted via POST)");
+    return false;
+  }
+
+  // check if name is not yet in use
+  name = req.params.name;
+  if(typeof name === "undefined" || name === null || Chunked.streams[name]) {
+    res.status(404);
+    res.send("name already in use or invalid");
+    return false;
+  }
+
+  Chunked.buffers[name] = new RingBuffer(10);
+  Chunked.streams[name] = chunked.request(url, function(data) {
+    Chunked.buffers[name].enq(data);
+  });
+
+  res.send("OK");
+});
+
+st.get('/chunkedstream/:name/stop', function (req, res) {
+  name = req.params.name;
+  if(typeof name === "undefined" || name === null || !Chunked.streams[name]) {
+    res.status(404);
+    res.send("name not in use or invalid");
+    return false;
+  }
+
+  chunked.abort(Chunked.streams[name]);
+  Chunked.buffers[name] = null;
+  Chunked.streams[name] = null;
+
+  res.send("OK");
+});
+
+st.get('/chunkedstream/:name/get', async (req, res) => {
+  if(typeof name === "undefined" || name === null || !Chunked.streams[name]) {
+    res.status(404);
+    res.send("name not in use or invalid");
+    return false;
+  }
+
+  var result = null
+  var timeout = 300;
+  while(result == null) {
+    try{
+      timeout *= 2;
+      result = Chunked.buffers[name].deq();
+      if(timeout > 4800)
+        break;
+    } catch (e) {
+      //console.log(e);
+    }
+    await new Promise(sleep => setTimeout(sleep, timeout));
+  }
+
+  res.send(result);
 });
 
 st.get('/twitter/auth', function (req, res) {
@@ -143,7 +218,7 @@ st.get('/twitter/auth', function (req, res) {
     st.locals.twitterConsumerSecret,
     '1.0',
     req.protocol + '://' + req.get('host') + '/twitter/auth/callback',
-    'HMAC-SHA1',
+    'HMAC-SHA1'
   );
   console.log(req.protocol + '://' + req.get('host') + '/twitter/auth/callback');
 
@@ -178,23 +253,23 @@ st.get('/twitter/auth/callback', function(req, res){
 st.get('/twitter/auth/success', function(req, res) {
   res.send("authed");
   twitterInit();
-})
+});
 
 st.get('/twitter/stream/start', function (req, res) {
-  if(st.locals.stream == null) {
+  if(Twitter.stream == null) {
     res.send("Please authenticate first");
     return;
   }
-  st.locals.stream.startStream();
+  Twitter.stream.startStream();
   res.send('stream started');
 });
 
 st.get('/twitter/stream/stop', function (req, res) {
-  if(st.locals.stream == null) {
+  if(Twitter.stream == null) {
     res.send("Please authenticate first");
     return;
   }
-  st.locals.stream.stopStream();
+  Twitter.stream.stopStream();
   res.send('stream stopped');
 });
 
@@ -222,8 +297,6 @@ st.get('/twitter/get/attrib/:attrib', async (req, res) => {
   }
 })
 
-var bodyParser = require('body-parser');
-st.use(bodyParser.json());
 st.post('/json/get/attrib/:attrib', function (req, res) {
   var attribPath;
   var attrib;
@@ -273,17 +346,17 @@ st.post('/json/get/geo', function (req, res) {
 
 // Functions
 async function getTweet() {
-  st.locals.lastRequest = Date.now();
-  st.locals.tweetsRequested++;
+  Twitter.lastRequest = Date.now();
+  Twitter.tweetsRequested++;
 
-  if(st.locals.stream == null) {
+  if(Twitter.stream == null) {
     return null;
   }
 
   var result = null
   while(result == null) {
     try{
-      result = st.locals.buf.deq();
+      result = Twitter.buffer.deq();
     } catch (e) {
       //console.log(e);
     }
@@ -291,21 +364,13 @@ async function getTweet() {
   }
 
   return result;
-  //
-  // // wait 1s and try again
-  // await new Promise(sleep => setTimeout(sleep, 1000));
-  // try{
-  //   return st.locals.buf.deq();
-  // } catch (e) {
-  //   return null;
-  // }
 }
 
 function twitterInit() {
   if(st.locals.twitterAccessToken == "")
     return false;
 
-  st.locals.T = new Twit({
+  Twitter.T = new Twit({
     consumer_key:         st.locals.twitterConsumerKey,
     consumer_secret:      st.locals.twitterConsumerSecret,
     access_token:         st.locals.twitterAccessToken,
@@ -316,85 +381,85 @@ function twitterInit() {
   });
 
   // Initialize Twitter stream
-  st.locals.stream = st.locals.T.stream('statuses/filter', { locations: [ '-179.999', '-89.999', '179.999', '89.999']});
-  st.locals.stream.streaming = true;
+  Twitter.stream = Twitter.T.stream('statuses/filter', { locations: [ '-179.999', '-89.999', '179.999', '89.999']});
+  Twitter.stream.streaming = true;
 
   if(st.locals.initStopped) {
     setTimeout(function() {
-      st.locals.stream.stopStream();
+      Twitter.stream.stopStream();
     }, 1000);
   }
 
-  st.locals.stream.stopStream = function() {
+  Twitter.stream.stopStream = function() {
     this.stop();
     this.streaming = false;
     st.locals.lastStop = Date.now();
   }
 
-  st.locals.stream.startStream = async () => {
-    if(st.locals.stream.streaming)
+  Twitter.stream.startStream = async () => {
+    if(Twitter.stream.streaming)
       return;
 
     //console.log(Date.now() - st.locals.lastStop);
     while((Date.now() - st.locals.lastStop) < 5000)
       return;
 
-    st.locals.stream.start();
-    st.locals.lastRequest = Date.now();
+    Twitter.stream.start();
+    Twitter.lastRequest = Date.now();
   }
 
   // Stream handling
-  st.locals.stream.on('tweet', function(tweet) {
-    st.locals.buf.enq(tweet);
-    st.locals.tweetsReceived++;
+  Twitter.stream.on('tweet', function(tweet) {
+    Twitter.buffer.enq(tweet);
+    Twitter.tweetsReceived++;
   });
 
-  // st.locals.stream.on('limit', function(msg) {
+  // Twitter.stream.on('limit', function(msg) {
   //   console.error("Twitter >> Limit: ");
   //   console.error(msg);
   // });
 
-  st.locals.stream.on('warning', function(msg) {
+  Twitter.stream.on('warning', function(msg) {
     console.error("Twitter >> Warning: " + msg);
   });
 
-  st.locals.stream.on('error', function(msg) {
+  Twitter.stream.on('error', function(msg) {
     console.error("Twitter >> Error: " + msg);
   });
 
-  st.locals.stream.on('disconnect', function(msg) {
+  Twitter.stream.on('disconnect', function(msg) {
     console.error("Twitter >> Disconnect");
   });
 
-  // st.locals.stream.on('connect', function(msg) {
+  // Twitter.stream.on('connect', function(msg) {
   //   console.error("Twitter >> Connecting");
   // });
   //
-  st.locals.stream.on('connected', function(msg) {
-    st.locals.stream.streaming = true;
+  Twitter.stream.on('connected', function(msg) {
+    Twitter.stream.streaming = true;
   });
 }
 
 function status() {
   var ret = "";
-  if(st.locals.stream == null) {
+  if(Twitter.stream == null) {
     return "\rStream has not been initialized yet, please go to http://" + os.hostname() + ":" + st.locals.port + "/twitter/auth for authentication.";
     return ret;
   } else {
-    return "\rReceived: "+ st.locals.tweetsReceived + " | Requested: "+ st.locals.tweetsRequested + " | Buffer: " + st.locals.buf.size() + "/" + st.locals.buf.capacity() + (st.locals.stream.streaming ? " | streaming" : " | stopped    ");
+    return "\rReceived: "+ Twitter.tweetsReceived + " | Requested: "+ Twitter.tweetsRequested + " | Buffer: " + Twitter.buffer.size() + "/" + Twitter.buffer.capacity() + (Twitter.stream.streaming ? " | streaming" : " | stopped    ");
   }
 }
 
 function statusJSON() {
   return {
-    init:       st.locals.stream != null,
+    init:       Twitter.stream != null,
     hostname:   os.hostname(),
     port:       st.locals.port,
-    received:   st.locals.tweetsReceived,
-    streaming:  st.locals.stream.streaming,
-    processed:  st.locals.tweetsRequested,
-    bufferSize: st.locals.buf.size(),
-    bufferCap:  st.locals.buf.capacity(),
+    received:   Twitter.tweetsReceived,
+    streaming:  Twitter.stream.streaming,
+    processed:  Twitter.tweetsRequested,
+    bufferSize: Twitter.buffer.size(),
+    bufferCap:  Twitter.buffer.capacity(),
   };
   return ret;
 }
