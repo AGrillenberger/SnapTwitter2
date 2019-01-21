@@ -1,5 +1,6 @@
 node_modules
 server.*
 .env
+.env.json
 updateSnap.sh
 .DS_Store
