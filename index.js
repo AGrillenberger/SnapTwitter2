@@ -322,6 +322,12 @@ st.post('/json/get/attrib/:attrib', function (req, res) {
     if(attrib == "text") {
       path[attrib] = path[attrib].replace("<","(").replace(">",")").replace(/(?:\r\n|\r|\n)/g, "<br />");
     }
+
+    // stip quotation marks of attributes
+    found = path[attrib].match(/\"(.*)\"/);
+    if(found === null && found.length == 2)
+      res.json(found[1]);
+
     res.json(path[attrib]);
   }
 })
