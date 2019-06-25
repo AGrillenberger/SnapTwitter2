@@ -325,7 +325,7 @@ st.post('/json/get/attrib/:attrib', function (req, res) {
 
     // stip quotation marks of attributes
     found = path[attrib].match(/\"(.*)\"/);
-    if(found === null && found.length == 2)
+    if(found !== null && found.length == 2)
       res.json(found[1]);
 
     res.json(path[attrib]);
