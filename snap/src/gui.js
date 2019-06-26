@@ -91,6 +91,7 @@ var JukeboxMorph;
 var StageHandleMorph;
 var PaletteHandleMorph;
 var CamSnapshotDialogMorph;
+var ide;
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
@@ -207,6 +208,8 @@ function IDE_Morph(isAutoFill) {
 }
 
 IDE_Morph.prototype.init = function (isAutoFill) {
+    ide = this;
+
     // global font setting
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
 
@@ -268,14 +271,6 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
-
-    // load SnapTwitter
-    this.getURL(
-        this.resourceURL('SnapTwitter', 'st2-project.xml'),
-        function (txt) {
-            this.droppedText(txt, 'Snap!Twitter example project');
-        }
-    );
 
     this.setFlatDesign();
 };
@@ -5084,7 +5079,7 @@ IDE_Morph.prototype.languageMenu = function () {
     });
     menu.popup(world, pos);
 };
-
+abc = null;
 IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     var translation = document.getElementById('language'),
         src = this.resourceURL('locale', 'lang-' + lang + '.js'),
@@ -5103,6 +5098,8 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     };
     document.head.appendChild(translation);
     translation.src = src;
+    this.language = lang;
+    abc = this;
 };
 
 IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {

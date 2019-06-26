@@ -28,8 +28,22 @@
                 world = new WorldMorph(document.getElementById('world'));
                 world.worldCanvas.focus();
                 new IDE_Morph().openIn(world);
+
+                // load SnapTwitter
+                langString = "";
+                if(typeof ide.language !== "undefined" && ide.language != "")
+                  langString = "?lang=" + ide.language;
+                ide.getURL(
+                    ide.resourceURL('SnapTwitter', 'st2-project.xml' + langString),
+                    function (txt) {
+                        ide.droppedText(txt, 'Snap!Twitter example project');
+                    }
+                );
+
+                ide.setFlatDesign();
+
                 loop();
-			};
+			      };
             function loop() {
                 requestAnimationFrame(loop);
                 world.doOneCycle();

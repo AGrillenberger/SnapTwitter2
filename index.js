@@ -44,17 +44,6 @@ process.on('SIGINT', function() {
 // CORS
 st.use(cors({origin: "*"}));
 
-// Authentication for app
-if(st.locals.useBasicAuth) {
-  var users = (process.env.USERS !== undefined) ? JSON.parse(process.env.USERS) : { 'demo': 'demo' };
-  var basicAuth = require('express-basic-auth');
-  st.use(basicAuth({
-    challenge: true,
-    unauthorizedResponse: "unauthorized",
-    users: users
-  }));
-}
-
 // if no keys: exit
 if(st.locals.twitterConsumerKey == "" || st.locals.twitterConsumerSecret == "") {
   console.log("Twitter consumer key and secret have to be defined!");
@@ -128,6 +117,58 @@ setInterval(function() {
 var bodyParser = require('body-parser');
 st.use(bodyParser.urlencoded({ extended: true }));
 st.use(bodyParser.json());
+
+st.use('/snap/SnapTwitter/st2-project.xml', function(req, res) {
+  file = fs.readFileSync('snap/SnapTwitter/st2-project-tpl.xml','utf8');
+  blocks = fs.readFileSync('snap/SnapTwitter/st2-blocks.xml','utf8');
+  blocks = blocks.replace('<blocks app="Snap!Twitter 2.0" version="1">',"").replace('</blocks>',"");
+  file = file.replace("%%%ST2-BLOCKS-GO-HERE%%%", blocks);
+
+  lang = req.query.lang;
+  if(typeof lang == "undefined" || lang == "" || lang == "en") {
+    repl = [
+      ["%%%headGet%%%", "Get a tweet from twitter"],
+      ["%%%blockGet%%%", "Click block to execute"],
+      ["%%%headTable%%%", "Get a better overview on a tweet"],
+      ["%%%blockTable%%%", "Drag the 'get single tweet' block here and then click the outer block"],
+      ["%%%headAttr%%%", "Read an attribute from a tweet"],
+      ["%%%blockAttr%%%", "Enter an attribute name (e. g. text, id or user.name) into the first field and drag the tweet onto the cloud"],
+      ["%%%headForeach%%%", "Show the text of all tweets on the stage"],
+      ["%%%blockForeach%%%", "Here again, the cloud needs to be replaced. As the for-each-block continuously reads the tweets, we do not need to use the get-single-tweet-block but instead just drag the orange tweet-variable from the outer block onto the cloud to use it."],
+      ["%%%headMap%%%", "Show the tweets on a map"],
+      ["%%%blockMap%%%", "This block shows a marker on the map. It needs a position, which can be read from a tweet using 'get geo from tweet' block. You can customize the marker for example by using other colors. And you can also show a text when you click the marker on the stage. At the moment it just says 'hello' - change it to the tweets text!"],
+      ["%%%headChart%%%", "For visualizing e. g. statistics, we can use charts"],
+      ["%%%blockChart%%%", "This C-shaped block is used for defining the chart. Inside the C, we will place the chart elements:"],
+      ["%%%blockChartExample1%%%", "for example, a bar chart with a line at y=5"],
+      ["%%%blockChartExample2%%%", "or a combined line and bar chart"],
+      ["%%%blockChartExample3%%%", "or a pie chart"],
+      ["%%%headEnd%%%", "And of course, all these possibilites can be combined - just try, for example, to visualize the most common languages on twitter using both, a map and a chart."]
+    ];
+  } else if(lang == "de") {
+    repl = [
+      ["%%%headGet%%%", "Tweet von Twitter abfragen"],
+      ["%%%blockGet%%%", "Block zum ausführen anklicken"],
+      ["%%%headTable%%%", "Bessere Übersicht über einen Tweet"],
+      ["%%%blockTable%%%", "Das leere Feld muss mit dem 'einzelnen Tweet abfragen'-Block gefüllt werden"],
+      ["%%%headAttr%%%", "Attribut eines Tweets auslesen"],
+      ["%%%blockAttr%%%", "In das erste Feld den Attributnamen (z. B. text, id or user.name) eingeben und den Tweet auf die Wolke ziehen"],
+      ["%%%headForeach%%%", "Alle Tweettexte auf der Bühne anzeigen"],
+      ["%%%blockForeach%%%", "Auch hier muss die Wolke durch den Tweet ersetzt werden. Da der für-alle-Block aber die Tweets schon ausliest, ist der 'einzelnen Tweet auslesen'-Block hier ungünstig, stattdessen kann die orange Tweet-Variable aus dem Schleifenkopf auf die Wolke gezogen werden."],
+      ["%%%headMap%%%", "Tweets auf einer Karte anzeigen"],
+      ["%%%blockMap%%%", "Dieser Block erzeugt einen Pin auf einer Karte. Er benötigt eine Position für diesen, die aus einem Tweet mit dem 'Geodaten aus Tweet'-Block ausgelesen werden können. Der Marker kann durch Farben angepasst werden, außerdem kann beim Anklicken ein Text angezeigt werden. Gerade wird nur 'hallo' angezeigt - ändere dies, damit der Tweettext angezeigt wird."],
+      ["%%%headChart%%%", "Visualisierung von Statistiken"],
+      ["%%%blockChart%%%", "Dieser C-förmige Block wird genutzt, um das Diagramm zu initialisieren. Innerhalb des C werden die Diagrammelemente definiert:"],
+      ["%%%blockChartExample1%%%", "zum Beispiel ein Balkendiagramm mit einer Linie bei y=5"],
+      ["%%%blockChartExample2%%%", "oder ein kombiniertes Balken- und Liniendiagramm"],
+      ["%%%blockChartExample3%%%", "oder ein Tortendiagramm"],
+      ["%%%headEnd%%%", "Natürlich können alle Möglichkeiten kombiniert werden - versuche doch, die meistverwendeten Sprachen sowohl mit einer Karte als auch einem Diagramm zu visualisieren."]
+    ];
+  }
+
+  file = file.replaceMultiple(repl);
+
+  res.send(file);
+});
 
 st.use('/snap', express.static('snap'));
 
@@ -209,6 +250,17 @@ st.get('/chunkedstream/:name/get', async (req, res) => {
 
   res.send(result);
 });
+
+// Authentication for app (only for enpoints after this point!)
+if(st.locals.useBasicAuth) {
+  var users = (process.env.USERS !== undefined) ? JSON.parse(process.env.USERS) : { 'demo': 'demo' };
+  var basicAuth = require('express-basic-auth');
+  st.use(basicAuth({
+    unauthorizedResponse: "unauthorized",
+    users: users
+  }));
+}
+
 
 st.get('/twitter/auth', function (req, res) {
   auth = new OAuth(
@@ -473,4 +525,14 @@ function statusJSON() {
 function clientId(req) {
   var client = req.headers['user-agent'] + req.connection.remoteAddress;
   return md5(client);
+}
+
+// gets an array [ [0 => "find1", 1 => "repl1"], [...], ... ]
+String.prototype.replaceMultiple = function(arr) {
+  myString = this;
+  for(var fr of arr) {
+    myString = myString.replace(fr[0], fr[1]);
+  }
+
+  return myString;
 }

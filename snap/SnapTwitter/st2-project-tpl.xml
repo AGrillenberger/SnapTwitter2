@@ -1,0 +1,172 @@
+<project name="Snap!Twitter 2.0" app="Snap!Twitter 2.0" version="1">
+  <notes></notes>
+  <thumbnail>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAAB4CAYAAAB1ovlvAAAC9ElEQVR4Xu3WIU5kQRhG0SI4WAALAINDYMDgMW1hNSQ4NPtBE8J+UKQng0BMZkILMjfhP60r9aXvO3l5e9vtdrv8FIgK7AEYlTf7UQBAENICAKb5jQPIQFoAwDS/cQAZSAsAmOY3DiADaQEA0/zGAWQgLQBgmt84gAykBQBM8xsHkIG0AIBpfuMAMpAWADDNbxxABtICAKb5jQPIQFoAwDS/cQAZSAsAmOY3DiADaQEA0/zGAWQgLQBgmt84gAykBQBM8xsHkIG0AIBpfuMAMpAWADDNbxxABtICAKb5jQPIQFoAwC/yv7+/r/39/fQh/eRxAL94uq+vr+v+/n7d3Nysw8PDtdlsfrKH//7fANwh+cPDw3p+fv44+fuNeHR0tK6urtbx8fG6uLjY4QZH/lUAwB1sPD09rcfHx8+Tb29v6/r6+uONeHt7uw4ODna4xZG/FQDwCxcvLy/r7u5unZ2drdPT03V5eblOTk5o+qYCAO7wDXh+fv5NuV3zZwEAmUgLAJjmNw4gA2kBANP8xgFkIC0AYJrfOIAMpAUATPMbB5CBtACAaX7jADKQFgAwzW8cQAbSAgCm+Y0DyEBaAMA0v3EAGUgLAJjmNw4gA2kBANP8xgFkIC0AYJrfOIAMpAUATPMbB5CBtACAaX7jADKQFgAwzW8cQAbSAgCm+Y0DyEBaAMA0v3EAGUgLAJjmNw4gA2kBANP8xgFkIC2wl64bH18AwPEE2gAAtv3HrwM4nkAbAMC2//h1AMcTaAMA2PYfvw7geAJtAADb/uPXARxPoA0AYNt//DqA4wm0AQBs+49fB3A8gTYAgG3/8esAjifQBgCw7T9+HcDxBNoAALb9x68DOJ5AGwDAtv/4dQDHE2gDANj2H78O4HgCbQAA2/7j1wEcT6ANAGDbf/w6gOMJtAEAbPuPXwdwPIE2AIBt//HrAI4n0AYAsO0/fh3A8QTaAAC2/cevAzieQBsAwLb/+HUAxxNoAwDY9h+/DuB4Am2AX1OcY0jtAviqAAAAAElFTkSuQmCC</thumbnail>
+  <stage name="Stage" width="600" height="300" costume="0" tempo="60" threadsafe="false" lines="round" ternary="false" codify="false" inheritance="true" sublistIDs="false" scheduled="false" id="1">
+    <pentrails>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAEsCAYAAAAfPc2WAAAO5klEQVR4Xu3WMREAAAgDMerfNCZ+DAI65Bh+5wgQIECAAAECBFKBpWvGCBAgQIAAAQIETmB5AgIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAAYHlBwgQIECAAAECsYDAikHNESBAgAABAgQElh8gQIAAAQIECMQCAisGNUeAAAECBAgQEFh+gAABAgQIECAQCwisGNQcAQIECBAgQEBg+QECBAgQIECAQCwgsGJQcwQIECBAgAABgeUHCBAgQIAAAQKxgMCKQc0RIECAAAECBASWHyBAgAABAgQIxAICKwY1R4AAAQIECBAQWH6AAAECBAgQIBALCKwY1BwBAgQIECBAQGD5AQIECBAgQIBALCCwYlBzBAgQIECAAAGB5QcIECBAgAABArGAwIpBzREgQIAAAQIEBJYfIECAAAECBAjEAgIrBjVHgAABAgQIEBBYfoAAAQIECBAgEAsIrBjUHAECBAgQIEBAYPkBAgQIECBAgEAsILBiUHMECBAgQIAAgQeA2QEt69HvxwAAAABJRU5ErkJggg==</pentrails>
+    <costumes>
+      <list id="2"></list>
+    </costumes>
+    <sounds>
+      <list id="3"></list>
+    </sounds>
+    <variables></variables>
+    <blocks></blocks>
+    <scripts></scripts>
+    <sprites>
+      <sprite name="Sprite" idx="1" x="0.5007149065013436" y="-0.2778322913453053" heading="90" scale="1" rotation="1" draggable="true" costume="0" color="80,80,80" pen="tip" id="8">
+        <costumes>
+          <list id="9"></list>
+        </costumes>
+        <sounds>
+          <list id="10"></list>
+        </sounds>
+        <blocks></blocks>
+        <variables></variables>
+        <scripts>
+          <comment x="23" y="10" w="108" collapsed="false">%%%headGet%%%</comment>
+          <comment x="22" y="212" w="145" collapsed="false">%%%headAttr%%%</comment>
+          <script x="44" y="259">
+            <custom-block s="get %s from tweet %obj">
+              <l>lang</l><l/>
+              <comment w="480" collapsed="false">%%%blockAttr%%%</comment>
+            </custom-block>
+          </script>
+          <comment x="21" y="320" w="182" collapsed="false">%%%headForeach%%%</comment>
+          <script x="48" y="370">
+            <custom-block s="for each %upvar do %cs">
+              <l>tweet</l>
+              <script>
+                <block s="bubble">
+                  <custom-block s="get %s from tweet %obj">
+                    <l>text</l><l/>
+                    <comment w="475" collapsed="false">%%%blockForeach%%%</comment>
+                  </custom-block>
+                </block>
+              </script>
+            </custom-block>
+          </script>
+          <comment x="20" y="485" w="135" collapsed="false">%%%headMap%%%</comment>
+          <script x="38" y="150">
+            <custom-block s="tweet %obj as table"><l/>
+              <comment w="340" collapsed="false">%%%blockTable%%%</comment>
+            </custom-block>
+          </script>
+          <script x="42" y="715.0000000000001">
+            <custom-block s="chart %cs">
+              <script></script>
+              <comment w="481.9999999999999" collapsed="false">%%%blockChart%%%</comment>
+            </custom-block>
+          </script>
+          <script x="43" y="777.0000000000001">
+            <custom-block s="chart %cs">
+              <script>
+                <custom-block s="bar chart: values: %l labels: %l name: %txt colors %l">
+                  <block s="reportNewList">
+                    <list>
+                      <l>1</l>
+                      <l>3</l>
+                      <l>6</l>
+                    </list>
+                  </block><l/>
+                  <l></l><l/></custom-block>
+                <custom-block s="horizontal line: y = %n color %s">
+                  <l>5</l>
+                  <l>0,0,0</l>
+                </custom-block>
+              </script>
+              <comment w="198" collapsed="false">%%%blockChartExample1%%%</comment>
+            </custom-block>
+          </script>
+          <script x="43" y="874.0000000000001">
+            <custom-block s="chart %cs">
+              <script>
+                <custom-block s="bar chart: values: %l labels: %l name: %txt colors %l">
+                  <block s="reportNewList">
+                    <list>
+                      <l>1</l>
+                      <l>3</l>
+                      <l>6</l>
+                    </list>
+                  </block><l/>
+                  <l></l><l/></custom-block>
+                <custom-block s="chart line y values: %l name: %txt color: %txt">
+                  <block s="reportNewList">
+                    <list>
+                      <l>12</l>
+                      <l>5</l>
+                      <l>8</l>
+                    </list>
+                  </block>
+                  <l>lines</l>
+                  <l>r,g,b</l>
+                </custom-block>
+              </script>
+              <comment w="171" collapsed="false">%%%blockChartExample2%%%</comment>
+            </custom-block>
+          </script>
+          <script x="44" y="976">
+            <custom-block s="chart %cs">
+              <script>
+                <custom-block s="pie chart: values: %l names: %l">
+                  <block s="reportNewList">
+                    <list>
+                      <l>1</l>
+                      <l>3</l>
+                      <l>6</l>
+                    </list>
+                  </block>
+                  <block s="reportNewList">
+                    <list>
+                      <l>first slice</l>
+                      <l>second slice</l>
+                      <l>third slice</l>
+                    </list>
+                  </block>
+                </custom-block>
+              </script>
+              <comment w="94" collapsed="false">%%%blockChartExample3%%%</comment>
+            </custom-block>
+          </script>
+          <comment x="10" y="1064" w="310" collapsed="false">%%%headEnd%%%</comment>
+          <script x="47" y="564">
+            <custom-block s="for each %upvar do %cs">
+              <l>tweet</l>
+              <script>
+                <custom-block s="marker at position %s size %n color %txt popup text %s">
+                  <custom-block s="get geo from tweet %obj"><block var="tweet"/></custom-block>
+                  <l>5</l>
+                  <l>#0000ff</l>
+                  <l></l>
+                  <comment w="517.9999999999998" collapsed="false">%%%blockMap%%%</comment>
+                </custom-block>
+              </script>
+            </custom-block>
+          </script>
+          <comment x="14" y="649.0000000000001" w="230" collapsed="false">%%%headChart%%%</comment>
+          <script x="36" y="67">
+            <custom-block s="get single tweet">
+              <comment w="90" collapsed="false">%%%blockGet%%%</comment>
+            </custom-block>
+          </script>
+          <comment x="20" y="98.99999999999997" w="110" collapsed="false">%%%headTable%%%</comment>
+        </scripts>
+      </sprite><watcher var="server" style="normal" x="11.889666666665562" y="11.889666666666663" color="243,118,29" hidden="true"/></sprites>
+  </stage>
+  <hidden></hidden>
+  <headers></headers>
+  <code></code>
+  <blocks>
+%%%ST2-BLOCKS-GO-HERE%%%
+  </blocks>
+  <variables>
+    <variable name="server">
+      <l>http://snaptwitter-dev.dataliteracy.education</l>
+    </variable>
+    <variable name="user">
+      <l>st2-dev</l>
+    </variable>
+    <variable name="password">
+      <l>snap</l>
+    </variable>
+  </variables>
+</project>
