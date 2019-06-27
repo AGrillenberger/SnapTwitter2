@@ -89,7 +89,7 @@
                     </list>
                   </block><l/>
                   <l></l><l/></custom-block>
-                <custom-block s="chart line y values: %l name: %txt color: %txt">
+                <custom-block s="line chart: y values: %l name: %txt color: %txt">
                   <block s="reportNewList">
                     <list>
                       <l>12</l>
@@ -132,7 +132,7 @@
             <custom-block s="for each %upvar do %cs">
               <l>tweet</l>
               <script>
-                <custom-block s="marker at position %s size %n color %txt popup text %s">
+                <custom-block s="marker at position %s size %n color %txt popup text %txt">
                   <custom-block s="get geo from tweet %obj"><block var="tweet"/></custom-block>
                   <l>5</l>
                   <l>#0000ff</l>
@@ -160,13 +160,13 @@
   </blocks>
   <variables>
     <variable name="server">
-      <l>http://snaptwitter-dev.dataliteracy.education</l>
+      <l>http://snaptwitter.dataliteracy.education</l>
     </variable>
     <variable name="user">
-      <l>st2-dev</l>
+      <l>demo</l>
     </variable>
     <variable name="password">
-      <l>snap</l>
+      <l>demo</l>
     </variable>
   </variables>
 </project>
