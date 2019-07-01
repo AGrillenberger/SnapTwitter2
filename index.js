@@ -27,19 +27,19 @@ st.locals.cookieSecret = process.env.COOKIESECRET;
 st.locals.useBasicAuth = process.env.USEBASICAUTH || true;
 
 // Database
-var instanceId = uniqid();
-const db = new Client({
-  connectionString: process.env.DATABASE_URL,
-});
-db.connect();
-db.query("INSERT INTO sysevents(type,instanceid) VALUES ('startup',$1);",[instanceId]);
-
-process.on('SIGINT', function() {
-  console.log("Caught interrupt signal");
-  db.query("INSERT INTO sysevents(type,instanceid) VALUES ('shutdown',$1);",[instanceId], (err,res) => {
-    process.exit();
-  });
-});
+// var instanceId = uniqid();
+// const db = new Client({
+//   connectionString: process.env.DATABASE_URL,
+// });
+// db.connect();
+// db.query("INSERT INTO sysevents(type,instanceid) VALUES ('startup',$1);",[instanceId]);
+//
+// process.on('SIGINT', function() {
+//   console.log("Caught interrupt signal");
+//   db.query("INSERT INTO sysevents(type,instanceid) VALUES ('shutdown',$1);",[instanceId], (err,res) => {
+//     process.exit();
+//   });
+// });
 
 // CORS
 st.use(cors({origin: "*"}));
@@ -353,7 +353,7 @@ st.get('/twitter/get/attrib/:attrib', async (req, res) => {
     res.status(404);
     res.send("");
   } else {
-    db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ($1,$2);",[req.params.attrib,clientId(req)]);
+    // db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ($1,$2);",[req.params.attrib,clientId(req)]);
     res.json(tweet[req.params.attrib]);
   }
 })
@@ -379,7 +379,7 @@ st.post('/json/get/attrib/:attrib', function (req, res) {
     res.send("err");
   } else {
     res.status(200);
-    db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ($1,$2);",[req.params.attrib,clientId(req)]);
+    // db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ($1,$2);",[req.params.attrib,clientId(req)]);
     if(attrib == "text") {
       path[attrib] = path[attrib].replace("<","(").replace(">",")").replace(/(?:\r\n|\r|\n)/g, "<br />");
     }
@@ -398,7 +398,7 @@ st.post('/json/get/geo', function (req, res) {
     res.send(req.body.geo.coordinates[0]+";"+req.body.geo.coordinates[1]);
     return;
   }
-  db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ('geo',$1);",[clientId(req)]);
+  // db.query("INSERT INTO selectedAttributes(attrib,clientid) VALUES ('geo',$1);",[clientId(req)]);
   var place = req.body.place;
   if(place != null && place.bounding_box != null && place.bounding_box.coordinates != null && place.bounding_box.coordinates[0] != null) {
     //calculate mid of bounding bounding_box
