@@ -182,9 +182,14 @@ st.use('/getStatus', function(req,res) {
   res.json(status);
 });
 
+st.use('/www', express.static('website'));
 
 st.get('/', function(req, res) {
-  res.redirect('/snap');
+  res.redirect('/www');
+});
+
+st.get('/twitter/demo', function(req, res) {
+  res.send(demoTweet());
 });
 
 st.post('/chunkedstream/:name/start', function (req, res) {
@@ -535,4 +540,61 @@ String.prototype.replaceMultiple = function(arr) {
   }
 
   return myString;
+}
+
+function demoTweet() {
+  texts = [
+    "demo tweet",
+    "test tweet",
+    "another test",
+    "just a test",
+    "tweet text",
+    "lorem ipsum",
+    "this is a test",
+    "demo mode"
+  ];
+
+  text = texts[Math.floor(Math.random() * texts.length)];
+  coord1 = Math.random() * 85 * ((Math.random() < 0.5) ? 1 : -1);
+  coord2 = Math.random() * 180 * ((Math.random() < 0.5) ? 1 : -1);
+  date = new Date();
+  id = Math.floor(Math.random() * (999999999999999999-(-111111111111111111) + (-111111111111111111)));
+
+  return `{
+  "created_at": "${date}",
+  "id_str": "${id}",
+  "text": "${text}",
+  "user": {
+    "id": 123,
+    "name": "demo",
+    "screen_name": "demo",
+    "location": "somewhere",
+    "url": "https:\/\/snaptwitter.dataliteracy.education\/",
+    "description": "XYZ"
+  },
+  "place": {
+  },
+  "entities": {
+    "hashtags": [
+    ],
+    "urls": [
+      {
+        "url": "XXX",
+        "unwound": {
+          "url": "XXX",
+          "title": "ABC"
+        }
+      }
+    ],
+    "user_mentions": [
+    ]
+  },
+  "geo": {
+    "type": "Point",
+    "coordinates": [
+      ${coord1},
+      ${coord2}
+    ]
+  }
+}`;
 }
