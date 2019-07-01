@@ -70,15 +70,6 @@ Chunked.streams = {};
 var OAuth = require('oauth').OAuth;
 var auth = null;
 
-// prepare session store
-var session = require('express-session');
-st.use(session({
-  secret: st.locals.cookieSecret,
-  name: 'sessionId',
-  resave: false,
-  saveUninitialized: true,
-}));
-
 // Prepare buffers
 var RingBuffer = require('ringbufferjs');
 Twitter.buffer = new RingBuffer(st.locals.bufferCap);
@@ -182,7 +173,20 @@ st.use('/getStatus', function(req,res) {
   res.json(status);
 });
 
-st.use('/www', express.static('website'));
+st.use('/www/resources', express.static('website/resources'));
+
+st.use('/www/de', express.static('website/de'));
+
+st.use('/www/en', express.static('website/en'));
+
+st.use('/www', function(req, res) {
+  lang = req.acceptsLanguages("de", "de-DE", "de-AT", "de-CH", "en", "en-US", "en-UK", "en-AU");
+  if(lang.toLowerCase().startsWith("de")) {
+    res.redirect("/www/de")
+  } else {
+    res.redirect("/www/en")
+  }
+});
 
 st.get('/', function(req, res) {
   res.redirect('/www');
