@@ -219,8 +219,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.applySavedSettings();
 
     // additional properties:
-    this.cloud = new Cloud();
-    this.cloudMsg = null;
+    //this.cloud = new Cloud();
+    //this.cloudMsg = null;
     this.source = null;
     this.serializer = new SnapSerializer();
 
@@ -279,36 +279,36 @@ IDE_Morph.prototype.openIn = function (world) {
     var hash, myself = this, urlLanguage = null;
 
     function initUser(username) {
-        sessionStorage.username = username;
-        if (username) {
-            myself.source = 'cloud';
-            if (!myself.cloud.verified) {
-                new DialogBoxMorph().inform(
-                    'Unverified account',
-                    'Your account is still unverified.\n' +
-                    'Please use the verification link that\n' +
-                    'was sent to your email address when you\n' +
-                    'signed up.\n\n' +
-                    'If you cannot find that email, please\n' +
-                    'check your spam folder. If you still\n' +
-                    'cannot find it, please use the "Resend\n' +
-                    'Verification Email..." option in the cloud\n' +
-                    'menu.',
-                    world,
-                    myself.cloudIcon(null, new Color(0, 180, 0))
-                );
-            }
-        }
+        // sessionStorage.username = username;
+        // if (username) {
+        //     myself.source = 'cloud';
+        //     if (!myself.cloud.verified) {
+        //         new DialogBoxMorph().inform(
+        //             'Unverified account',
+        //             'Your account is still unverified.\n' +
+        //             'Please use the verification link that\n' +
+        //             'was sent to your email address when you\n' +
+        //             'signed up.\n\n' +
+        //             'If you cannot find that email, please\n' +
+        //             'check your spam folder. If you still\n' +
+        //             'cannot find it, please use the "Resend\n' +
+        //             'Verification Email..." option in the cloud\n' +
+        //             'menu.',
+        //             world,
+        //             myself.cloudIcon(null, new Color(0, 180, 0))
+        //         );
+        //     }
+        // }
     }
 
     if (location.protocol !== 'file:') {
-        if (!sessionStorage.username) {
-            // check whether login should persist across browser sessions
-            this.cloud.initSession(initUser);
-        } else {
-            // login only persistent during a single browser session
-            this.cloud.checkCredentials(initUser);
-        }
+        // if (!sessionStorage.username) {
+        //     // check whether login should persist across browser sessions
+        //     this.cloud.initSession(initUser);
+        // } else {
+        //     // login only persistent during a single browser session
+        //     this.cloud.checkCredentials(initUser);
+        // }
     }
 
     this.buildPanes();
@@ -316,15 +316,15 @@ IDE_Morph.prototype.openIn = function (world) {
     world.userMenu = this.userMenu;
 
     // override SnapCloud's user message with Morphic
-    this.cloud.message = function (string) {
-        var m = new MenuMorph(null, string),
-            intervalHandle;
-        m.popUpCenteredInWorld(world);
-        intervalHandle = setInterval(function () {
-            m.destroy();
-            clearInterval(intervalHandle);
-        }, 2000);
-    };
+    // this.cloud.message = function (string) {
+    //     var m = new MenuMorph(null, string),
+    //         intervalHandle;
+    //     m.popUpCenteredInWorld(world);
+    //     intervalHandle = setInterval(function () {
+    //         m.destroy();
+    //         clearInterval(intervalHandle);
+    //     }, 2000);
+    // };
 
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
@@ -6128,11 +6128,11 @@ ProjectDialogMorph.prototype.buildContents = function () {
         this.srcBar.add(notification);
     }
 
-    this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+    //this.addSourceButton('cloud', localize('Cloud'), 'cloud');
 
     if (this.task === 'open') {
         this.buildFilterField();
-        this.addSourceButton('examples', localize('Examples'), 'poster');
+        //this.addSourceButton('examples', localize('Examples'), 'poster');
         if (this.ide.world().currentKey === 16) { // shiftClicked
             this.addSourceButton('local', localize('Browser'), 'globe');
         }
