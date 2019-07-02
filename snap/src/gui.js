@@ -3843,7 +3843,7 @@ IDE_Morph.prototype.editProjectNotes = function () {
 };
 
 IDE_Morph.prototype.newProject = function () {
-    this.source = this.cloud.username ? 'cloud' : null;
+    this.source = null; //this.cloud.username ? 'cloud' : null;
     if (this.stage) {
         this.stage.destroy();
     }
