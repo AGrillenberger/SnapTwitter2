@@ -3211,7 +3211,7 @@ IDE_Morph.prototype.projectMenu = function () {
           'New Project',
           function () {
             myself.getURL(
-              myself.resourceURL('SnapTwitter', 'st2-project.xml'),
+              myself.resourceURL('SnapTwitter/st2-project', ide.language),
               function (txt) {
                   myself.droppedText(txt, 'Snap!Twitter example project');
               }
@@ -5213,7 +5213,7 @@ IDE_Morph.prototype.languageMenu = function () {
     });
     menu.popup(world, pos);
 };
-abc = null;
+
 IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     var translation = document.getElementById('language'),
         src = this.resourceURL('locale', 'lang-' + lang + '.js'),
@@ -5233,7 +5233,6 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     document.head.appendChild(translation);
     translation.src = src;
     this.language = lang;
-    abc = this;
 };
 
 IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {

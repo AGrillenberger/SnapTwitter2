@@ -110,13 +110,14 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/snap/SnapTwitter/st2-project.xml', function(req, res) {
+app.use('/snap/SnapTwitter/st2-project/:lang', function(req, res) {
   file = fs.readFileSync('snap/SnapTwitter/st2-project-tpl.xml','utf8');
   blocks = fs.readFileSync('snap/SnapTwitter/st2-blocks.xml','utf8');
   blocks = blocks.replace('<blocks app="Snap!Twitter 2.0" version="1">',"").replace('</blocks>',"");
   file = file.replace("%%%ST2-BLOCKS-GO-HERE%%%", blocks);
 
-  lang = req.query.lang;
+  lang = req.params.lang;
+
   if(typeof lang == "undefined" || lang == "" || lang == "en") {
     repl = [
       ["%%%headGet%%%", "Get a tweet from twitter"],
