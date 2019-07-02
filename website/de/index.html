@@ -1,0 +1,67 @@
+<!--#include file="/common/header.html"-->
+<!--#include file="/common/logo-de.html"-->
+      <div class="row bg-light p-5">
+        <div class="col-8 px-5 border-right border-dark">
+          <h3 class="text-center">Funktionen</h3>
+          <p>
+            Snap<em>!</em>Twitter ist eine Erweiterung für die blockbasierte Programmiersprache <a href="https://snap.berkeley.edu">Snap<em>!</em></a> und bringt daher alle dort vorhandenen Funktionen mit. Um zusätzlich einfache Datenanalysen zu ermöglichen, wurde Snap<em>!</em> hier jedoch um einige Funktionen erweitert und durch die Möglichkeit zum Zugriff auf echte Live-Twitterdaten auch eine reichhaltige Datenquelle angebunden. Die Hauptfunktionen von Snap<em>!</em>Twitter sind derzeit:
+          </p>
+          <ul>
+            <li>Zugriff auf bis zu 40 Tweets pro Sekunde<br />(theoretisches Limit der Twitter API, aufgrund der JavaScript-Ausführung im Browser können meist bis zu 5 Tweets pro Sekunde ausgewertet werden)</li>
+            <li>Nutzung aller Metadaten eines Tweets (<a href="https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object">über 150 Attribute</a>) für Analysezwecke</li>
+            <li>Visualisierung von Daten, wie beispielsweise geocodierten Tweets, auf einer interaktiven Karte (basierend auf <a href="https://leafletjs.com">leaflet.js</a>)</li>
+            <li>Analyse von Daten und Visualisierung der Ergebnisse mit Diagrammen (basierend auf <a href="https://plot.ly">plotly.js</a>)</li>
+            <li>Kombination von Snap<em>!</em>Twitter mit anderen Snap<em>!</em>-Erweiterungen, die größtenteils kompatibel sind</li>
+            <li>Erweiterung von Snap<em>!</em>Twitter durch eigene Blöcke, die in Snap<em>!</em> einfach programmiert werden können</li>
+            <li>Modifikation von Snap<em>!</em>Twitter-Blöcken, die entweder in Snap<em>!</em>-Blöcken oder in JavaScript innerhalb von Snap<em>!</em> programmiert wurden</li>
+          </ul>
+          <p class="text-center">
+            <video autoplay loop class="img-fluid">
+              <source src="../resources/SnapTwitter.mp4" type="video/mp4">
+            </video>
+          </p>
+        </div>
+        <div class="col px-5 mr-5">
+          <h3 class="text-center">Nutzung von Snap<em>!</em>Twitter</h3>
+          <p>
+            Um einen ersten Eindruck davon zu bekommen, wie Snap<em>!</em>Twitter aussieht und welche Funktionen es bietet, können Sie direkt unseren Server (siehe unten nutzen). Da die Oberfläche von Snap<em>!</em>Twitter komplett im Browser lauffähig ist, müssen Sie nichts installieren. Aber Sie können nicht direkt auf Twitterdaten zugreifen, ohne uns zu kontaktieren: Da unser Server begrenzte Kapazitäten hat, müssen wir einen Überblick darüber behalten, wieviele Personen ihn gleichzeitig nutzen, damit ein gutes Nutzungserlebnis erreicht werden kann. Im Moment hat sich unser Snap<em>!</em>Twitter-Server für mehr als 50 gleichzeitige Nutzer bewährt -- trotzdem erwarten wir, dass bei deutlich mehr Nutzern die Tweetanzahl pro nutzer deutlich einbricht.
+          </p>
+          <p>
+            Falls Sie also gerne unseren Server nutzen möchten, kontaktieren Sie mich gerne (siehe unten).
+          </p>
+          <p class="text-center"><a href="/snap/snap.html#lang:de"><button type="button" class="btn btn-primary">&rightarrow; Snap<em>!</em>Twitter starten</button></a><br /><em>Achtung: Voller Zugriff nur nach vorherigem Kontakt mit den mitgeteilten Benutzerdaten!</em></p>
+          <p>
+            Anstatt unseren Server zu nutzen, können Sie natürlich auch einen eigenen Server aufsetzen - Snap<em>!</em>Twitter ist komplett Open-Source. Der Server basiert auf JavaScript und Node.js, es ist nicht zwingend ein zusätzlicher Webserver nötig, da Snap<em>!</em>Twitter einen solchen direkt mitbringt. Der Quellcode ist auf <a href="https://github.com/AGrillenberger/SnapTwitter2">GitHub</a> verfügbar und wird dort dokumentiert.
+          </p>
+        </div>
+      </div>
+      <div class="row bg-dark px-5 text-light">
+        <div class="col-2 mt-5 pl-5">
+          <h4 class="">Kontakt</h4>
+          <p>
+            <strong>Andreas Grillenberger</strong><br />
+            Freie Universität Berlin<br />
+            Didaktik der Informatik<br />
+            Königin-Luise-Str. 24/26<br />
+            14195 Berlin
+          </p>
+          <p>
+            E-Mail: <a href="mailto:andreas.grillenberger@fu-berlin.de" class="text-white">andreas.grillenberger@fu-berlin.de</a>
+          </p>
+        </div>
+        <div class="col-6 border-right my-5 pl-5">
+          <h4 class="hide">&nbsp;</h4>
+          <p>
+            <a href="legal.html" class="text-white">&rarr; Impressum</a><br />
+            <a href="dataprivacy.html" class="text-white">&rarr; Datenschutz</a><br />
+          </p>
+        </div>
+        <div class="col-4 p-5">
+          <h4>Quellcode</h4>
+          <p>
+            Snap<em>!</em>Twitter selbst wird quelloffen zur Verfügung gestellt und basiert auf Open-Source-Bibliotheken. Sie finden den gesamten Quellcode auf <a href="https://github.com/AGrillenberger/SnapTwitter2" class="text-white">&rightarrow; GitHub</a>.
+          </p>
+        </div>
+      </div>
+
+<!--#include file="/common/footer.html"-->
