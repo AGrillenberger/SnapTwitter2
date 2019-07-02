@@ -1,30 +1,31 @@
-var express = require('express');
-var cors = require('cors');
-var util = require('util');
-var https = require('https');
-var fs = require('fs');
-var os = require('os');
+const express = require('express');
+const cors = require('cors');
+const util = require('util');
+const https = require('https');
+const fs = require('fs');
+const os = require('os');
 const { Client } = require('pg');
-var uniqid = require('uniqid');
-var md5 = require('md5');
+const uniqid = require('uniqid');
+const md5 = require('md5');
+const ssi = require('ssi-middleware');
 
 require('dotenv').config();
 
 // Prepare Application
-var st = express();
-st.locals.title = "Snap!Twitter"; // Application title
-st.locals.port = process.env.PORT || 3000;  // Listening port
-st.locals.initStopped = process.env.INITSTOPPED || true; // Should streams be stopped immediately after initializing?
-st.locals.bufferCap = parseInt(process.env.BUFCAP) || 500; // buffer capacity
-st.locals.consoleStatus = true; // show console status
-st.locals.consoleStatusUpdateRate = 200; // console status update rate (ms)
-st.locals.waitBeforeDisconnect = process.env.WAITBEFOREDISCONNECT || 10000;
-st.locals.twitterConsumerKey = process.env.CONSUMERKEY;
-st.locals.twitterConsumerSecret = process.env.CONSUMERSECRET;
-st.locals.twitterAccessToken = process.env.ACCESSTOKEN;
-st.locals.twitterAccessTokenSecret = process.env.ACCESSTOKENSECRET;
-st.locals.cookieSecret = process.env.COOKIESECRET;
-st.locals.useBasicAuth = process.env.USEBASICAUTH || true;
+var app = express();
+app.locals.title = "Snap!Twitter"; // Application title
+app.locals.port = process.env.PORT || 3000;  // Listening port
+app.locals.initStopped = process.env.INITSTOPPED || true; // Should streams be stopped immediately after initializing?
+app.locals.bufferCap = parseInt(process.env.BUFCAP) || 500; // buffer capacity
+app.locals.consoleStatus = true; // show console status
+app.locals.consoleStatusUpdateRate = 200; // console status update rate (ms)
+app.locals.waitBeforeDisconnect = process.env.WAITBEFOREDISCONNECT || 10000;
+app.locals.twitterConsumerKey = process.env.CONSUMERKEY;
+app.locals.twitterConsumerSecret = process.env.CONSUMERSECRET;
+app.locals.twitterAccessToken = process.env.ACCESSTOKEN;
+app.locals.twitterAccessTokenSecret = process.env.ACCESSTOKENSECRET;
+app.locals.cookieSecret = process.env.COOKIESECRET;
+app.locals.useBasicAuth = process.env.USEBASICAUTH || true;
 
 // Database
 // var instanceId = uniqid();
@@ -42,10 +43,10 @@ st.locals.useBasicAuth = process.env.USEBASICAUTH || true;
 // });
 
 // CORS
-st.use(cors({origin: "*"}));
+app.use(cors({origin: "*"}));
 
 // if no keys: exit
-if(st.locals.twitterConsumerKey == "" || st.locals.twitterConsumerSecret == "") {
+if(app.locals.twitterConsumerKey == "" || app.locals.twitterConsumerSecret == "") {
   console.log("Twitter consumer key and secret have to be defined!");
   exit(1);
 }
@@ -58,7 +59,7 @@ Twitter.stream = null;
 Twitter.lastRequest = Date.now()
 
 // if hardcoded access token: init Twitter API
-if(st.locals.twitterAccessToken != "")
+if(app.locals.twitterAccessToken != "")
   twitterInit();
 
 // Chunked streaming APIs
@@ -72,14 +73,14 @@ var auth = null;
 
 // Prepare buffers
 var RingBuffer = require('ringbufferjs');
-Twitter.buffer = new RingBuffer(st.locals.bufferCap);
+Twitter.buffer = new RingBuffer(app.locals.bufferCap);
 Chunked.buffers = {}
 
 // Console status output
 Twitter.tweetsReceived = 0;
 Twitter.tweetsRequested = 0;
-if(st.locals.consoleStatus) {
-  setInterval(function() { process.stdout.write(status()); }, st.locals.consoleStatusUpdateRate);
+if(app.locals.consoleStatus) {
+  setInterval(function() { process.stdout.write(status()); }, app.locals.consoleStatusUpdateRate);
 }
 
 // prepare
@@ -87,13 +88,13 @@ if(st.locals.consoleStatus) {
 //   key: fs.readFileSync("server.key"),
 //   cert: fs.readFileSync("server.cert")
 // }, st)
-st.listen(st.locals.port, function () {
-  console.error(st.locals.title + ' is running on http://' + os.hostname() + ":" + st.locals.port);
+app.listen(app.locals.port, function () {
+  console.error(app.locals.title + ' is running on http://' + os.hostname() + ":" + app.locals.port);
 });
 
 // Pause stream when buffer full
 setInterval(function() {
-  if(Twitter.stream != null && Twitter.stream.streaming && (Date.now() - Twitter.lastRequest) > st.locals.waitBeforeDisconnect && Twitter.buffer.size() == Twitter.buffer.capacity())
+  if(Twitter.stream != null && Twitter.stream.streaming && (Date.now() - Twitter.lastRequest) > app.locals.waitBeforeDisconnect && Twitter.buffer.size() == Twitter.buffer.capacity())
     Twitter.stream.stopStream();
 }, 1000);
 
@@ -106,10 +107,10 @@ setInterval(function() {
 
 // HTTP requests
 var bodyParser = require('body-parser');
-st.use(bodyParser.urlencoded({ extended: true }));
-st.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-st.use('/snap/SnapTwitter/st2-project.xml', function(req, res) {
+app.use('/snap/SnapTwitter/st2-project.xml', function(req, res) {
   file = fs.readFileSync('snap/SnapTwitter/st2-project-tpl.xml','utf8');
   blocks = fs.readFileSync('snap/SnapTwitter/st2-blocks.xml','utf8');
   blocks = blocks.replace('<blocks app="Snap!Twitter 2.0" version="1">',"").replace('</blocks>',"");
@@ -161,25 +162,32 @@ st.use('/snap/SnapTwitter/st2-project.xml', function(req, res) {
   res.send(file);
 });
 
-st.use('/snap', express.static('snap'));
+app.use('/snap', express.static('snap'));
 
-st.use('/libraries', express.static('libraries'));
+app.use('/libraries', express.static('libraries'));
 
-st.use('/status', express.static('statuspage.html'));
+app.use('/status', express.static('statuspage.html'));
 
-st.use('/getStatus', function(req,res) {
+app.use('/getStatus', function(req,res) {
   var status = statusJSON();
   status.url = req.get('host');
   res.json(status);
 });
 
-st.use('/www/resources', express.static('website/resources'));
+app.use(ssi({
+    baseDir: `${__dirname}/website/`,
+    request: {
+      strictSSL: false
+    }
+  }));
 
-st.use('/www/de', express.static('website/de'));
+app.use('/www/resources', express.static('website/resources'));
 
-st.use('/www/en', express.static('website/en'));
+app.use('/www/de', express.static('website/de'));
 
-st.use('/www', function(req, res) {
+app.use('/www/en', express.static('website/en'));
+
+app.use('/www', function(req, res) {
   lang = req.acceptsLanguages("de", "de-DE", "de-AT", "de-CH", "en", "en-US", "en-UK", "en-AU");
   if(lang.toLowerCase().startsWith("de")) {
     res.redirect("/www/de")
@@ -188,15 +196,15 @@ st.use('/www', function(req, res) {
   }
 });
 
-st.get('/', function(req, res) {
+app.get('/', function(req, res) {
   res.redirect('/www');
 });
 
-st.get('/twitter/demo', function(req, res) {
+app.get('/twitter/demo', function(req, res) {
   res.send(demoTweet());
 });
 
-st.post('/chunkedstream/:name/start', function (req, res) {
+app.post('/chunkedstream/:name/start', function (req, res) {
   // expects url as postdata
   url = req.body.url;
   if(!url || url.length < 10) {
@@ -221,7 +229,7 @@ st.post('/chunkedstream/:name/start', function (req, res) {
   res.send("OK");
 });
 
-st.get('/chunkedstream/:name/stop', function (req, res) {
+app.get('/chunkedstream/:name/stop', function (req, res) {
   name = req.params.name;
   if(typeof name === "undefined" || name === null || !Chunked.streams[name]) {
     res.status(404);
@@ -236,7 +244,7 @@ st.get('/chunkedstream/:name/stop', function (req, res) {
   res.send("OK");
 });
 
-st.get('/chunkedstream/:name/get', async (req, res) => {
+app.get('/chunkedstream/:name/get', async (req, res) => {
   if(typeof name === "undefined" || name === null || !Chunked.streams[name]) {
     res.status(404);
     res.send("name not in use or invalid");
@@ -261,22 +269,22 @@ st.get('/chunkedstream/:name/get', async (req, res) => {
 });
 
 // Authentication for app (only for enpoints after this point!)
-if(st.locals.useBasicAuth) {
+if(app.locals.useBasicAuth) {
   var users = (process.env.USERS !== undefined) ? JSON.parse(process.env.USERS) : { 'demo': 'demo' };
   var basicAuth = require('express-basic-auth');
-  st.use(basicAuth({
+  app.use(basicAuth({
     unauthorizedResponse: "unauthorized",
     users: users
   }));
 }
 
 
-st.get('/twitter/auth', function (req, res) {
+app.get('/twitter/auth', function (req, res) {
   auth = new OAuth(
     'https://api.twitter.com/oauth/request_token',
     'https://api.twitter.com/oauth/access_token',
-    st.locals.twitterConsumerKey,
-    st.locals.twitterConsumerSecret,
+    app.locals.twitterConsumerKey,
+    app.locals.twitterConsumerSecret,
     '1.0',
     req.protocol + '://' + req.get('host') + '/twitter/auth/callback',
     'HMAC-SHA1'
@@ -287,23 +295,23 @@ st.get('/twitter/auth', function (req, res) {
     if (e) {
       console.log("Error getting OAuth request token : " + util.inspect(e));
     }
-    st.locals.oauthRequestToken = token;
-    st.locals.oauthRequestTokenSecret = secret;
-    res.redirect("https://twitter.com/oauth/authorize?oauth_token="+st.locals.oauthRequestToken);
+    app.locals.oauthRequestToken = token;
+    app.locals.oauthRequestTokenSecret = secret;
+    res.redirect("https://twitter.com/oauth/authorize?oauth_token="+app.locals.oauthRequestToken);
   });
 });
 
-st.get('/twitter/auth/callback', function(req, res){
+app.get('/twitter/auth/callback', function(req, res){
   auth.getOAuthAccessToken(
-    st.locals.oauthRequestToken,
-    st.locals.oauthRequestTokenSecret,
+    app.locals.oauthRequestToken,
+    app.locals.oauthRequestTokenSecret,
     req.query.oauth_verifier,
     function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
       if (error) {
         res.send("Error getting OAuth access token : " + util.inspect(error) + "["+oauthAccessToken+"]"+ "["+oauthAccessTokenSecret+"]"+ "["+util.inspect(results)+"]", 500);
       } else {
-        st.locals.twitterAccessToken = oauthAccessToken;
-        st.locals.twitterAccessTokenSecret = oauthAccessTokenSecret;
+        app.locals.twitterAccessToken = oauthAccessToken;
+        app.locals.twitterAccessTokenSecret = oauthAccessTokenSecret;
 
         res.redirect("/twitter/auth/success");
       }
@@ -311,12 +319,12 @@ st.get('/twitter/auth/callback', function(req, res){
   );
 });
 
-st.get('/twitter/auth/success', function(req, res) {
+app.get('/twitter/auth/success', function(req, res) {
   res.send("authed");
   twitterInit();
 });
 
-st.get('/twitter/stream/start', function (req, res) {
+app.get('/twitter/stream/start', function (req, res) {
   if(Twitter.stream == null) {
     res.send("Please authenticate first");
     return;
@@ -325,7 +333,7 @@ st.get('/twitter/stream/start', function (req, res) {
   res.send('stream started');
 });
 
-st.get('/twitter/stream/stop', function (req, res) {
+app.get('/twitter/stream/stop', function (req, res) {
   if(Twitter.stream == null) {
     res.send("Please authenticate first");
     return;
@@ -334,7 +342,7 @@ st.get('/twitter/stream/stop', function (req, res) {
   res.send('stream stopped');
 });
 
-st.get('/twitter/get/complete', async (req, res) => {
+app.get('/twitter/get/complete', async (req, res) => {
   tweet = await getTweet();
   if(tweet === null) {
     res.status(444);
@@ -344,7 +352,7 @@ st.get('/twitter/get/complete', async (req, res) => {
   }
 })
 
-st.get('/twitter/get/attrib/:attrib', async (req, res) => {
+app.get('/twitter/get/attrib/:attrib', async (req, res) => {
   tweet = await getTweet();
   if(tweet === null) {
     res.status(444);
@@ -358,7 +366,7 @@ st.get('/twitter/get/attrib/:attrib', async (req, res) => {
   }
 })
 
-st.post('/json/get/attrib/:attrib', function (req, res) {
+app.post('/json/get/attrib/:attrib', function (req, res) {
   var attribPath;
   var attrib;
   if(req.params.attrib.includes(".")) {
@@ -393,7 +401,7 @@ st.post('/json/get/attrib/:attrib', function (req, res) {
   }
 })
 
-st.post('/json/get/geo', function (req, res) {
+app.post('/json/get/geo', function (req, res) {
   if(req.body.geo != null) {
     res.send(req.body.geo.coordinates[0]+";"+req.body.geo.coordinates[1]);
     return;
@@ -434,14 +442,14 @@ async function getTweet() {
 }
 
 function twitterInit() {
-  if(st.locals.twitterAccessToken == "")
+  if(app.locals.twitterAccessToken == "")
     return false;
 
   Twitter.T = new Twit({
-    consumer_key:         st.locals.twitterConsumerKey,
-    consumer_secret:      st.locals.twitterConsumerSecret,
-    access_token:         st.locals.twitterAccessToken,
-    access_token_secret:  st.locals.twitterAccessTokenSecret,
+    consumer_key:         app.locals.twitterConsumerKey,
+    consumer_secret:      app.locals.twitterConsumerSecret,
+    access_token:         app.locals.twitterAccessToken,
+    access_token_secret:  app.locals.twitterAccessTokenSecret,
     //app_only_auth:        true,
     timeout_ms:           60*1000,
     strict_ssl:           true,
@@ -451,7 +459,7 @@ function twitterInit() {
   Twitter.stream = Twitter.T.stream('statuses/filter', { locations: [ '-179.999', '-89.999', '179.999', '89.999']});
   Twitter.stream.streaming = true;
 
-  if(st.locals.initStopped) {
+  if(app.locals.initStopped) {
     setTimeout(function() {
       Twitter.stream.stopStream();
     }, 1000);
@@ -460,15 +468,15 @@ function twitterInit() {
   Twitter.stream.stopStream = function() {
     this.stop();
     this.streaming = false;
-    st.locals.lastStop = Date.now();
+    app.locals.lastStop = Date.now();
   }
 
   Twitter.stream.startStream = async () => {
     if(Twitter.stream.streaming)
       return;
 
-    //console.log(Date.now() - st.locals.lastStop);
-    while((Date.now() - st.locals.lastStop) < 5000)
+    //console.log(Date.now() - app.locals.lastStop);
+    while((Date.now() - app.locals.lastStop) < 5000)
       return;
 
     Twitter.stream.start();
@@ -510,7 +518,7 @@ function twitterInit() {
 function status() {
   var ret = "";
   if(Twitter.stream == null) {
-    return "\rStream has not been initialized yet, please go to http://" + os.hostname() + ":" + st.locals.port + "/twitter/auth for authentication.";
+    return "\rStream has not been initialized yet, please go to http://" + os.hostname() + ":" + app.locals.port + "/twitter/auth for authentication.";
     return ret;
   } else {
     return "\rReceived: "+ Twitter.tweetsReceived + " | Requested: "+ Twitter.tweetsRequested + " | Buffer: " + Twitter.buffer.size() + "/" + Twitter.buffer.capacity() + (Twitter.stream.streaming ? " | streaming" : " | stopped    ");
@@ -521,7 +529,7 @@ function statusJSON() {
   return {
     init:       Twitter.stream != null,
     hostname:   os.hostname(),
-    port:       st.locals.port,
+    port:       app.locals.port,
     received:   Twitter.tweetsReceived,
     streaming:  Twitter.stream.streaming,
     processed:  Twitter.tweetsRequested,
