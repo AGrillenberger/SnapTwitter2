@@ -4,3 +4,4 @@ server.*
 .env.json
 updateSnap.sh
 .DS_Store
+.vscode
