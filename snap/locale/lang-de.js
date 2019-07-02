@@ -848,6 +848,10 @@ SnapTranslator.dict.de = {
         'Projektanmerkungen...',
     'New':
         'Neu',
+    'New example project':
+        'Neues Beispielprojekt',
+    'New empty project':
+        'Neues leeres Projekt',
     'Open...':
         '\u00d6ffnen...',
     'Save':
