@@ -113,7 +113,7 @@ app.use(bodyParser.json());
 app.use('/snap/SnapTwitter/st2-project/:lang', function(req, res) {
   file = fs.readFileSync('snap/SnapTwitter/st2-project-tpl.xml','utf8');
   blocks = fs.readFileSync('snap/SnapTwitter/st2-blocks.xml','utf8');
-  blocks = blocks.replace('<blocks app="Snap!Twitter 2.0" version="1">',"").replace('</blocks>',"");
+  blocks = blocks.replace(/<blocks\sapp=[^>]*>/,"").replace('</blocks>',"");
   file = file.replace("%%%ST2-BLOCKS-GO-HERE%%%", blocks);
 
   lang = req.params.lang;
