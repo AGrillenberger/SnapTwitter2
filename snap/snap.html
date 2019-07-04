@@ -32,17 +32,18 @@
 
                 // load SnapTwitter
                 ide.setFlatDesign();
-                if(typeof ide.language === "undefined" || ide.language == "")
-                  ide.language = "en";
-                ide.getURL(
-                    ide.resourceURL('SnapTwitter/st2-project', ide.language),
-                    function (txt) {
-                        ide.droppedText(txt, 'Snap!Twitter example project');
-                    }
-                );
-                
-                loop();
-			      };
+                setTimeout(function() {
+                    if(typeof ide.language === "undefined" || ide.language == "")
+                    ide.language = "en";
+                    ide.getURL(
+                        ide.resourceURL('SnapTwitter/st2-project', ide.language),
+                        function (txt) {
+                            ide.droppedText(txt, 'Snap!Twitter example project');
+                        }
+                    );
+                    loop();
+                }, 500);
+			};
             function loop() {
                 requestAnimationFrame(loop);
                 world.doOneCycle();
