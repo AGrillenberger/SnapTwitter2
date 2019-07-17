@@ -1195,7 +1195,7 @@
             </block>
         </script>
     </block-definition>
-    <block-definition s="table %&apos;list&apos; → CSV, filename %&apos;f&apos;" type="command" category="data">
+    <block-definition s="📂table %&apos;list&apos; → CSV, filename %&apos;f&apos;" type="command" category="data">
         <header></header>
         <code></code>
         <translations></translations>
@@ -1245,7 +1245,7 @@
             </block>
         </script>
     </block-definition>
-    <block-definition s="CSV from URL %&apos;url&apos; → table, delimiter %&apos;del&apos;" type="reporter" category="data">
+    <block-definition s="📂CSV from URL %&apos;url&apos; → table, delimiter %&apos;del&apos;" type="reporter" category="data">
         <header></header>
         <code></code>
         <translations></translations>
@@ -1269,7 +1269,7 @@
             </block>
         </script>
     </block-definition>
-    <block-definition s="uploaded file" type="reporter" category="sensing">
+    <block-definition s="📂uploaded file" type="reporter" category="sensing">
         <header></header>
         <code></code>
         <translations></translations>
@@ -1288,7 +1288,7 @@
             </block>
         </script>
     </block-definition>
-    <block-definition s="CSV from upload → table, delimiter %&apos;del&apos;" type="reporter" category="data">
+    <block-definition s="📂CSV from upload → table, delimiter %&apos;del&apos;" type="reporter" category="data">
         <header></header>
         <code></code>
         <translations></translations>
@@ -1298,7 +1298,7 @@
         <script>
             <block s="doReport">
                 <custom-block s="CSV %s → table, delimiter %s">
-                    <custom-block s="uploaded file"></custom-block>
+                    <custom-block s="📂uploaded file"></custom-block>
                     <block var="del"/>
                 </custom-block>
             </block>
