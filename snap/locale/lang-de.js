@@ -219,6 +219,8 @@ SnapTranslator.dict.de = {
         'Karte',
     'Chart':
         'Diagramm',
+    'Data':
+        'Daten',
 
     // editor:
     'draggable':

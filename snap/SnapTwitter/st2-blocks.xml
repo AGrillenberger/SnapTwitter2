@@ -1198,7 +1198,7 @@
     <block-definition s="📂table %&apos;list&apos; → CSV, filename %&apos;f&apos;" type="command" category="data">
         <header></header>
         <code></code>
-        <translations></translations>
+        <translations>de:📂Tabelle _ → CSV, Dateiname _&#xD;</translations>
         <inputs>
             <input type="%s"></input>
             <input type="%s"></input>
@@ -1248,7 +1248,7 @@
     <block-definition s="📂CSV from URL %&apos;url&apos; → table, delimiter %&apos;del&apos;" type="reporter" category="data">
         <header></header>
         <code></code>
-        <translations></translations>
+        <translations>de:📂CSV von URL _ → Tabelle, Trennzeichen _&#xD;</translations>
         <inputs>
             <input type="%s"></input>
             <input type="%s">;<options>;&#xD;,</options></input>
@@ -1272,7 +1272,7 @@
     <block-definition s="📂uploaded file" type="reporter" category="sensing">
         <header></header>
         <code></code>
-        <translations></translations>
+        <translations>de:📂hochgeladene Datei&#xD;</translations>
         <inputs></inputs>
         <script>
             <block s="doReport">
@@ -1291,7 +1291,7 @@
     <block-definition s="📂CSV from upload → table, delimiter %&apos;del&apos;" type="reporter" category="data">
         <header></header>
         <code></code>
-        <translations></translations>
+        <translations>de:📂CSV aus Upload → Tabelle, Trennzeichen _&#xD;</translations>
         <inputs>
             <input type="%s">;<options>;&#xD;,</options></input>
         </inputs>
