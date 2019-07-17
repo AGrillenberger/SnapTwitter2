@@ -114,8 +114,7 @@
         <code></code>
         <translations></translations>
         <inputs>
-            <input type="%s" readonly="true">GET<options>GET&#xD;POST&#xD;PUT&#xD;DELETE</options>
-            </input>
+            <input type="%s" readonly="true">GET<options>GET&#xD;POST&#xD;PUT&#xD;DELETE</options></input>
             <input type="%s">http://snap.berkeley.edu</input>
             <input type="%s"></input>
             <input type="%mult%l" readonly="true"></input>
@@ -364,8 +363,7 @@
             <input type="%s"></input>
             <input type="%s"></input>
             <input type="%n">5</input>
-            <input type="%txt" readonly="true">#0000ff&#xD;&#xD; &#xD; <options>blue=#0000ff&#xD;green=#008000&#xD;red=#ff0000&#xD;yellow=#ffff00&#xD;orange=#ffc300&#xD;brown=#a04000&#xD;black=#000&#xD;white=#fff</options>
-            </input>
+            <input type="%txt" readonly="true">#0000ff&#xD;&#xD; &#xD; <options>blue=#0000ff&#xD;green=#008000&#xD;red=#ff0000&#xD;yellow=#ffff00&#xD;orange=#ffc300&#xD;brown=#a04000&#xD;black=#000&#xD;white=#fff</options></input>
         </inputs>
         <script>
             <block s="doWarp">
@@ -555,8 +553,7 @@
         <inputs>
             <input type="%s"></input>
             <input type="%n">5</input>
-            <input type="%txt" readonly="true">#0000ff&#xD;&#xD; &#xD; <options>blue=#0000ff&#xD;green=#008000&#xD;red=#ff0000&#xD;yellow=#ffff00&#xD;orange=#ffc300&#xD;brown=#a04000&#xD;black=#000&#xD;white=#fff</options>
-            </input>
+            <input type="%txt" readonly="true">#0000ff&#xD;&#xD; &#xD; <options>blue=#0000ff&#xD;green=#008000&#xD;red=#ff0000&#xD;yellow=#ffff00&#xD;orange=#ffc300&#xD;brown=#a04000&#xD;black=#000&#xD;white=#fff</options></input>
         </inputs>
         <script>
             <custom-block s="🗺 marker: position %s size %n color %txt popup text %txt">
@@ -574,8 +571,7 @@
         <inputs>
             <input type="%s"></input>
             <input type="%n">5</input>
-            <input type="%txt" readonly="true">#0000ff&#xD;&#xD; &#xD; <options>blue=#0000ff&#xD;green=#008000&#xD;red=#ff0000&#xD;yellow=#ffff00&#xD;orange=#ffc300&#xD;brown=#a04000&#xD;black=#000&#xD;white=#fff</options>
-            </input>
+            <input type="%txt" readonly="true">#0000ff&#xD;&#xD; &#xD; <options>blue=#0000ff&#xD;green=#008000&#xD;red=#ff0000&#xD;yellow=#ffff00&#xD;orange=#ffc300&#xD;brown=#a04000&#xD;black=#000&#xD;white=#fff</options></input>
             <input type="%txt"></input>
         </inputs>
         <script>
@@ -1196,6 +1192,115 @@
                         </script>
                     </block>
                 </script>
+            </block>
+        </script>
+    </block-definition>
+    <block-definition s="table %&apos;list&apos; → CSV, filename %&apos;f&apos;" type="command" category="data">
+        <header></header>
+        <code></code>
+        <translations></translations>
+        <inputs>
+            <input type="%s"></input>
+            <input type="%s"></input>
+        </inputs>
+        <script>
+            <block s="doRun">
+                <block s="reportJSFunction">
+                    <list>
+                        <l>list</l>
+                        <l>filename</l>
+                    </list>
+                    <l>if(!list.canBeCSV()) {&#xD;  alert("Only two-dimensional lists (tables) can be converted to CSV");&#xD;  return;&#xD;}&#xD;&#xD;var dl = document.createElement(&apos;a&apos;);&#xD;dl.style.display = &apos;none&apos;;&#xD;dl.setAttribute(&apos;href&apos;, &apos;data:text/csv;charset=utf-8,&apos; + encodeURIComponent(list.asCSVsem()));&#xD;dl.setAttribute(&apos;download&apos;, filename);&#xD;&#xD;document.body.appendChild(dl);&#xD;dl.click();&#xD;document.body.removeChild(dl);</l>
+                </block>
+                <list>
+                    <block var="list"/>
+                    <block var="f"/>
+                </list>
+            </block>
+        </script>
+    </block-definition>
+    <block-definition s="CSV %&apos;csv&apos; → table, delimiter %&apos;del&apos;" type="reporter" category="internal">
+        <header></header>
+        <code></code>
+        <translations></translations>
+        <inputs>
+            <input type="%s"></input>
+            <input type="%s">;<options>,&#xD;;</options></input>
+        </inputs>
+        <script>
+            <block s="doReport">
+                <block s="evaluate">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>csv</l>
+                            <l>sep</l>
+                        </list>
+                        <l>array = csv.split(&apos;\n&apos;).map( row =&gt; row.split(&apos;;&apos;) ).map( row =&gt; row.map( str =&gt; str.replace(/^\"(.*)\"/, "$1") ) );&#xD;maxLen = Math.max.apply(Math, array.map(row =&gt; row.length));&#xD;array = array.filter(row =&gt; row.length == maxLen);&#xD;&#xD;return new List(array.map( row =&gt; new List(row) ));</l>
+                    </block>
+                    <list>
+                        <block var="csv"/>
+                        <block var="del"/>
+                    </list>
+                </block>
+            </block>
+        </script>
+    </block-definition>
+    <block-definition s="CSV from URL %&apos;url&apos; → table, delimiter %&apos;del&apos;" type="reporter" category="data">
+        <header></header>
+        <code></code>
+        <translations></translations>
+        <inputs>
+            <input type="%s"></input>
+            <input type="%s">;<options>;&#xD;,</options></input>
+        </inputs>
+        <script>
+            <block s="doReport">
+                <custom-block s="CSV %s → table, delimiter %s">
+                    <block s="reportURL">
+                        <block s="reportJoinWords">
+                            <list>
+                                <l>https://cors-anywhere.herokuapp.com/</l>
+                                <block var="url"/>
+                            </list>
+                        </block>
+                    </block>
+                    <block var="del"/>
+                </custom-block>
+            </block>
+        </script>
+    </block-definition>
+    <block-definition s="uploaded file" type="reporter" category="sensing">
+        <header></header>
+        <code></code>
+        <translations></translations>
+        <inputs></inputs>
+        <script>
+            <block s="doReport">
+                <block s="evaluate">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>proc</l>
+                        </list>
+                        <l>if (!proc.fileReaderState) {&#xD;  proc.fileReaderState = 1;&#xD;  proc.file = "";&#xD;  proc.reader = "";&#xD;&#xD;  up = document.createElement("input");&#xD;  up.setAttribute("type", "file");&#xD;  up.setAttribute("name", "file");&#xD;  up.addEventListener(&apos;change&apos;, function(evt) {&#xD;	   if(evt.target.files &amp;&amp; evt.target.files.length &gt; 0) {&#xD;     	proc.file = evt.target.files[0];&#xD;	   } else {&#xD;      proc.file = "err";&#xD;    }&#xD;    proc.fileReaderState = 2;&#xD;  }, false);&#xD;  document.body.appendChild(up);&#xD;  up.click();&#xD;  document.body.removeChild(up);&#xD;} else if (proc.fileReaderState == 2) {&#xD;  proc.reader = new FileReader();&#xD;  proc.reader.readAsText(proc.file);&#xD;  proc.fileReaderState = 3;  &#xD;} else if (proc.fileReaderState == 3 &amp;&amp; proc.reader.readyState == proc.reader.DONE) {&#xD;  proc.fileReaderState = null;&#xD;  proc.file = null;&#xD;  res = proc.reader.result;&#xD;  proc.reader = null;&#xD;  return res;&#xD;}&#xD;proc.pushContext(&apos;doYield&apos;);&#xD;proc.pushContext();</l>
+                    </block>
+                    <list></list>
+                </block>
+            </block>
+        </script>
+    </block-definition>
+    <block-definition s="CSV from upload → table, delimiter %&apos;del&apos;" type="reporter" category="data">
+        <header></header>
+        <code></code>
+        <translations></translations>
+        <inputs>
+            <input type="%s">;<options>;&#xD;,</options></input>
+        </inputs>
+        <script>
+            <block s="doReport">
+                <custom-block s="CSV %s → table, delimiter %s">
+                    <custom-block s="uploaded file"></custom-block>
+                    <block var="del"/>
+                </custom-block>
             </block>
         </script>
     </block-definition>

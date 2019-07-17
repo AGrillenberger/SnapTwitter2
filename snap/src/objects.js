@@ -148,6 +148,7 @@ SpriteMorph.prototype.categories =
         'twitter',
         'map',
         'chart',
+        'data',
         'internal',
     ];
 
@@ -165,6 +166,7 @@ SpriteMorph.prototype.blockColor = {
     twitter: new Color(2, 167, 196),
     map: new Color(168, 110, 40),
     chart: new Color(153,150,3),
+    data: new Color(150,0,0),
     internal: new Color(0,0,0),
 };
 

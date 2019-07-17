@@ -103,6 +103,7 @@ var ListWatcherMorph;
     itemsArray()            - answer a JavaScript array shallow copy of myself
     asText()                - answer my elements (recursively) concatenated
     asCSV()                 - answer a csv-formatted String of myself
+    asCSVsem()              - as above, but with semicoli instead of commas
     asJSON()                - answer a json-formatted String of myself
 */
 
@@ -456,6 +457,48 @@ List.prototype.asCSV = function () {
     }
     // single row
     return items.map(encodeCell).join(',');
+};
+
+List.prototype.asCSVsem = function () {
+    // RFC 4180
+    // Caution, no error catching!
+    // this method assumes that the list.canBeCSV()
+
+    var items = this.itemsArray(),
+        rows = [];
+    
+    function encodeCell(atomicValue) {
+        var string = atomicValue.toString(),
+            cell;
+        if (string.indexOf('\"') ===  -1 &&
+                (string.indexOf('\n') === -1) &&
+                (string.indexOf('\,') === -1)) {
+            return '\"' + string + '\"';
+        }
+        cell = ['\"'];
+        string.split('').forEach(function (letter) {
+            cell.push(letter);
+            if (letter === '\"') {
+                cell.push(letter);
+            }
+        });
+        cell.push('\"');
+        return cell.join('');
+    }
+
+    if (items.some(function (any) {return any instanceof List; })) {
+        // 2-dimensional table
+        items.forEach(function (item) {
+            if (item instanceof List) {
+                rows.push(item.itemsArray().map(encodeCell).join(';'));
+            } else {
+                rows.push(encodeCell(item));
+            }
+        });
+        return rows.join('\n');
+    }
+    // single row
+    return items.map(encodeCell).join(';');
 };
 
 List.prototype.asJSON = function (guessObjects) {
