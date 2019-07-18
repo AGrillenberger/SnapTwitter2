@@ -747,36 +747,7 @@
         </script>
     </block-definition>
     <block-definition s="🐦 attribute %&apos;attrib&apos; from tweet %&apos;tw&apos;" type="reporter" category="twitter">
-        <header></header>
-        <code></code>
-        <translations>de:🐦Attribut _ von Tweet _&#xD;</translations>
-        <inputs>
-            <input type="%s"></input>
-            <input type="%obj"></input>
-        </inputs>
-        <script>
-            <block s="doReport">
-                <block s="evaluate">
-                    <block s="reportJSFunction">
-                        <list>
-                            <l>text</l>
-                        </list>
-                        <l>// remove quotation marks&#xD;return text.replace(/^"(.*)"$/,"$1");</l>
-                    </block>
-                    <list>
-                        <custom-block s="SnapTwitter POST %s data %s">
-                            <block s="reportJoinWords">
-                                <list>
-                                    <l>json/get/attrib/</l>
-                                    <block var="attrib"/>
-                                </list>
-                            </block>
-                            <block var="tw"/>
-                        </custom-block>
-                    </list>
-                </block>
-            </block>
-        </script>
+        <header></header><code></code><translations>de:🐦Attribut _ von Tweet _&#xD;</translations><inputs><input type="%s"></input><input type="%obj"></input></inputs><script><block s="doDeclareVariables"><list><l>attribs</l><l>res</l></list></block><block s="doSetVar"><l>attribs</l><block s="reportTextSplit"><block var="attrib"/><l>.</l></block></block><block s="doSetVar"><l>res</l><custom-block s="🐦 tweet %obj as table"><block var="tw"/></custom-block></block><block s="doUntil"><block s="reportEquals"><block s="reportListLength"><block var="attribs"/></block><l>0</l></block><script><block s="doSetVar"><l>res</l><block s="reportListItem"><l>2</l><block s="reportFindFirst"><block s="reifyPredicate"><autolambda><block s="reportEquals"><block s="reportListItem"><l>1</l><l/></block><block s="reportListItem"><l>1</l><block var="attribs"/></block></block></autolambda><list></list></block><block var="res"/></block></block></block><block s="doDeleteFromList"><l>1</l><block var="attribs"/></block></script></block><block s="doReport"><block var="res"/></block></script>
     </block-definition>
     <block-definition s="🐦 geo of tweet %&apos;tweet&apos;" type="reporter" category="twitter">
         <header></header>
