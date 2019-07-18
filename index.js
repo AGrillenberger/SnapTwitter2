@@ -353,6 +353,24 @@ app.get('/twitter/get/complete', async (req, res) => {
   }
 })
 
+app.get('/twitter/get/multiple/:num', async (req, res) => {
+  tweet = await getTweet();
+  if(tweet === null) {
+    res.status(444);
+    res.send("<a href=\"/twitter/auth\">Twitter authentication required</a>");
+  } else if (req.params.num > 50) {
+    res.status(406);
+    res.send("Only up to 50 tweets may be transferred at a time");
+  } else {
+    arr = [tweet];
+    num = req.params.num - 1;
+    while(num-- > 0) {
+      arr.push(await getTweet());
+    }
+    res.json(arr);
+  }
+})
+
 app.get('/twitter/get/attrib/:attrib', async (req, res) => {
   tweet = await getTweet();
   if(tweet === null) {

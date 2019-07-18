@@ -1239,4 +1239,10 @@
             </block>
         </script>
     </block-definition>
+    <block-definition s="JSON array %&apos;arr&apos; to list" type="reporter" category="internal">
+        <header></header><code></code><translations></translations><inputs><input type="%s"></input></inputs><script><block s="doReport"><block s="evaluate"><block s="reportJSFunction"><list><l>txt</l></list><l>parse = JSON.parse(txt);&#xD;return new List(parse.map(x =&gt; (typeof x == "object" ? JSON.stringify(x) : x)));</l></block><list><block var="arr"/></list></block></block></script>
+    </block-definition>
+    <block-definition s="🐦 %&apos;num&apos; tweets as list" type="reporter" category="twitter">
+        <header></header><code></code><translations>de:🐦 _ Tweets als Liste&#xD;</translations><inputs><input type="%n">5</input></inputs><script><block s="doReport"><custom-block s="JSON array %s to list"><custom-block s="SnapTwitter request %s"><block s="reportJoinWords"><list><l>twitter/get/multiple/</l><block var="num"/></list></block></custom-block></custom-block></block></script>
+    </block-definition>
 </blocks>
