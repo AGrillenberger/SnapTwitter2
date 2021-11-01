@@ -747,52 +747,10 @@
         </script>
     </block-definition>
     <block-definition s="🐦 attribute %&apos;attrib&apos; from tweet %&apos;tw&apos;" type="reporter" category="twitter">
-        <header></header>
-        <code></code>
-        <translations>de:🐦Attribut _ von Tweet _&#xD;</translations>
-        <inputs>
-            <input type="%s"></input>
-            <input type="%obj"></input>
-        </inputs>
-        <script>
-            <block s="doReport">
-                <block s="evaluate">
-                    <block s="reportJSFunction">
-                        <list>
-                            <l>text</l>
-                        </list>
-                        <l>// remove quotation marks&#xD;return text.replace(/^"(.*)"$/,"$1");</l>
-                    </block>
-                    <list>
-                        <custom-block s="SnapTwitter POST %s data %s">
-                            <block s="reportJoinWords">
-                                <list>
-                                    <l>json/get/attrib/</l>
-                                    <block var="attrib"/>
-                                </list>
-                            </block>
-                            <block var="tw"/>
-                        </custom-block>
-                    </list>
-                </block>
-            </block>
-        </script>
+        <header></header><code></code><translations>de:🐦Attribut _ von Tweet _&#xD;</translations><inputs><input type="%s"></input><input type="%obj"></input></inputs><script><block s="doDeclareVariables"><list><l>attribs</l><l>res</l></list></block><block s="doSetVar"><l>attribs</l><block s="reportTextSplit"><block var="attrib"/><l>.</l></block></block><block s="doSetVar"><l>res</l><custom-block s="🐦 tweet %obj as table"><block var="tw"/></custom-block></block><block s="doUntil"><block s="reportEquals"><block s="reportListLength"><block var="attribs"/></block><l>0</l></block><script><block s="doSetVar"><l>res</l><block s="reportListItem"><l>2</l><block s="reportFindFirst"><block s="reifyPredicate"><autolambda><block s="reportEquals"><block s="reportListItem"><l>1</l><l/></block><block s="reportListItem"><l>1</l><block var="attribs"/></block></block></autolambda><list></list></block><block var="res"/></block></block></block><block s="doDeleteFromList"><l>1</l><block var="attribs"/></block></script></block><block s="doReport"><block var="res"/></block></script>
     </block-definition>
     <block-definition s="🐦 geo of tweet %&apos;tweet&apos;" type="reporter" category="twitter">
-        <header></header>
-        <code></code>
-        <translations>de:🐦Geodaten von Tweet _&#xD;</translations>
-        <inputs>
-            <input type="%obj"></input>
-        </inputs>
-        <script>
-            <block s="doReport">
-                <custom-block s="SnapTwitter POST %s data %s">
-                    <l>json/get/geo</l>
-                    <block var="tweet"/>
-                </custom-block>
-            </block>
-        </script>
+        <header></header><code></code><translations>de:🐦Geodaten von Tweet _&#xD;</translations><inputs><input type="%obj"></input></inputs><script><block s="doIf"><block s="reportNot"><block s="reportEquals"><custom-block s="🐦 attribute %s from tweet %obj"><l>geo</l><block var="tweet"/></custom-block><l></l></block></block><script><block s="doReport"><block s="reportCombine"><custom-block s="🐦 attribute %s from tweet %obj"><l>geo.coordinates</l><block var="tweet"/></custom-block><block s="reifyReporter"><autolambda><block s="reportJoinWords"><list><block var="#1"/><l>;</l><block var="#2"/></list></block></autolambda><list><l>#1</l><l>#2</l></list></block></block></block></script></block><block s="doIf"><block s="reportNot"><block s="reportEquals"><custom-block s="🐦 attribute %s from tweet %obj"><l>place</l><block var="tweet"/></custom-block><l></l></block></block><script><block s="doDeclareVariables"><list><l>corners</l></list></block><block s="doSetVar"><l>corners</l><block s="reportListItem"><l>1</l><custom-block s="🐦 attribute %s from tweet %obj"><l>place.bounding_box.coordinates</l><block var="tweet"/></custom-block></block></block><block s="doReport"><block s="reportJoinWords"><list><block s="reportQuotient"><block s="reportSum"><block s="reportListItem"><l>2</l><block s="reportListItem"><l>1</l><block var="corners"/></block></block><block s="reportListItem"><l>2</l><block s="reportListItem"><l>3</l><block var="corners"/></block></block></block><l>2</l></block><l>;</l><block s="reportQuotient"><block s="reportSum"><block s="reportListItem"><l>1</l><block s="reportListItem"><l>1</l><block var="corners"/></block></block><block s="reportListItem"><l>1</l><block s="reportListItem"><l>3</l><block var="corners"/></block></block></block><l>2</l></block></list></block></block></script></block><block s="doReport"><l></l></block></script>
     </block-definition>
     <block-definition s="🐦 tweet %&apos;t&apos; as table" type="reporter" category="twitter">
         <header></header>
@@ -1220,30 +1178,7 @@
         </script>
     </block-definition>
     <block-definition s="CSV %&apos;csv&apos; → table, delimiter %&apos;del&apos;" type="reporter" category="internal">
-        <header></header>
-        <code></code>
-        <translations></translations>
-        <inputs>
-            <input type="%s"></input>
-            <input type="%s">;<options>,&#xD;;</options></input>
-        </inputs>
-        <script>
-            <block s="doReport">
-                <block s="evaluate">
-                    <block s="reportJSFunction">
-                        <list>
-                            <l>csv</l>
-                            <l>sep</l>
-                        </list>
-                        <l>array = csv.split(&apos;\n&apos;).map( row =&gt; row.split(&apos;;&apos;) ).map( row =&gt; row.map( str =&gt; str.replace(/^\"(.*)\"/, "$1") ) );&#xD;maxLen = Math.max.apply(Math, array.map(row =&gt; row.length));&#xD;array = array.filter(row =&gt; row.length == maxLen);&#xD;&#xD;return new List(array.map( row =&gt; new List(row) ));</l>
-                    </block>
-                    <list>
-                        <block var="csv"/>
-                        <block var="del"/>
-                    </list>
-                </block>
-            </block>
-        </script>
+        <header></header><code></code><translations></translations><inputs><input type="%s"></input><input type="%s">;<options>,&#xD;;</options></input></inputs><script><block s="doReport"><block s="evaluate"><block s="reportJSFunction"><list><l>csv</l><l>sep</l></list><l>if(typeof String.prototype.mySplit !== "function") {&#xD; String.prototype.mySplit = function (delim) {&#xD;  res = [];&#xD;  &#xD;  openQuote = false;&#xD;  escaped = false;&#xD;  &#xD;  lastSplit = 0;&#xD;  i = 0;&#xD;  while(i &lt; this.length) {&#xD;    c = this.charAt(i++);&#xD;    &#xD;    if (escaped) { //char is escaped --&gt; ignore&#xD;      escaped = false;&#xD;      continue;&#xD;    } else if (c == &apos;\\&apos;) { // next char will be considered escaped&#xD;      escaped = true; &#xD;    } else if (c == &apos;"&apos;) { // if quote is open, close it and otherwise&#xD;      openQuote = !openQuote;  &#xD;    } else if (!openQuote &amp;&amp; c == delim) { // array should be split here&#xD;      res.push(this.substring(lastSplit, i-1));&#xD;      &#xD;      // if next char is whitespace --&gt; ignore&#xD;      if(this.charAt(i) == " ") {&#xD;        i++;&#xD;      }&#xD;      &#xD;      lastSplit = i;&#xD;    }&#xD;  }&#xD;  res.push(this.substring(lastSplit, this.length))&#xD;  &#xD;  return res;&#xD; }&#xD;}&#xD;&#xD;array = csv.split(&apos;\n&apos;).map( row =&gt; row.mySplit(sep) ).map( row =&gt; row.map( str =&gt; str.replace(/^\"(.*)\"/, "$1") ) );&#xD;maxLen = Math.max.apply(Math, array.map(row =&gt; row.length));&#xD;array = array.filter(row =&gt; row.length == maxLen);&#xD;&#xD;return new List(array.map( row =&gt; new List(row) ));</l></block><list><block var="csv"/><block var="del"/></list></block></block></script>
     </block-definition>
     <block-definition s="📂CSV from URL %&apos;url&apos; → table, delimiter %&apos;del&apos;" type="reporter" category="data">
         <header></header>
@@ -1303,5 +1238,14 @@
                 </custom-block>
             </block>
         </script>
+    </block-definition>
+    <block-definition s="JSON array %&apos;arr&apos; to list" type="reporter" category="internal">
+        <header></header><code></code><translations></translations><inputs><input type="%s"></input></inputs><script><block s="doReport"><block s="evaluate"><block s="reportJSFunction"><list><l>txt</l></list><l>parse = JSON.parse(txt);&#xD;return new List(parse.map(x =&gt; (typeof x == "object" ? JSON.stringify(x) : x)));</l></block><list><block var="arr"/></list></block></block></script>
+    </block-definition>
+    <block-definition s="🐦 %&apos;num&apos; tweets as list" type="reporter" category="twitter">
+        <header></header><code></code><translations>de:🐦 _ Tweets als Liste&#xD;</translations><inputs><input type="%n">5</input></inputs><script><block s="doReport"><custom-block s="JSON array %s to list"><custom-block s="SnapTwitter request %s"><block s="reportJoinWords"><list><l>twitter/get/multiple/</l><block var="num"/></list></block></custom-block></custom-block></block></script>
+    </block-definition>
+    <block-definition s="🐦tweet list %&apos;list&apos; as table" type="reporter" category="twitter">
+        <header></header><code></code><translations>de:🐦Tweetliste _ als Tabelle&#xD;</translations><inputs><input type="%l"></input></inputs><script><block s="doDeclareVariables"><list><l>attribs</l><l>return</l></list></block><block s="doSetVar"><l>attribs</l><block s="reportNewList"><list></list></block></block><block s="doForEach"><l>tweet</l><block s="reportMap"><block s="reifyReporter"><autolambda><block s="reportMap"><block s="reifyReporter"><autolambda><block s="reportListItem"><l>1</l><l/></block></autolambda><list></list></block><l/></block></autolambda><list></list></block><block s="reportMap"><block s="reifyReporter"><autolambda><custom-block s="🐦 tweet %obj as table"><l/></custom-block></autolambda><list></list></block><block var="list"/></block></block><script><block s="doForEach"><l>attrib</l><block var="tweet"/><script><block s="doIf"><block s="reportNot"><block s="reportListContainsItem"><block var="attribs"/><block var="attrib"/></block></block><script><block s="doAddToList"><block var="attrib"/><block var="attribs"/></block></script></block></script></block></script></block><block s="doSetVar"><l>return</l><block s="reportNewList"><list><block var="attribs"/></list></block></block><block s="doForEach"><l>tweet</l><block var="list"/><script><block s="doDeclareVariables"><list><l>tweetAsList</l></list></block><block s="doSetVar"><l>tweetAsList</l><block s="reportNewList"><list></list></block></block><block s="doForEach"><l>attrib</l><block var="attribs"/><script><block s="doAddToList"><custom-block s="🐦 attribute %s from tweet %obj"><block var="attrib"/><block var="tweet"/></custom-block><block var="tweetAsList"/></block></script></block><block s="doAddToList"><block var="tweetAsList"/><block var="return"/></block></script></block><block s="doReport"><block var="return"/></block></script>
     </block-definition>
 </blocks>
