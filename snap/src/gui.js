@@ -3205,7 +3205,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
-    menu.addPair('New example project', function() {
+    menu.addPair('Reload tutorial', function() {
       this.confirm(
           'Replace the current project with a new one?',
           'New Project',
@@ -3222,6 +3222,33 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addPair('New empty project', function() {
       myself.createNewProject();
     }, '^N');
+    menu.addPair('Load demo project 1 (language map)', function() {
+      this.confirm(
+          'Replace the current project with a new one?',
+          'New Project',
+          function () {
+            myself.getURL(
+              myself.resourceURL('SnapTwitter/st2-demo1', ide.language),
+              function (txt) {
+                  myself.droppedText(txt, 'Snap!Twitter example project');
+              }
+            );
+          }
+      );
+    });menu.addPair('Load demo project 2 (language chart)', function() {
+      this.confirm(
+          'Replace the current project with a new one?',
+          'New Project',
+          function () {
+            myself.getURL(
+              myself.resourceURL('SnapTwitter/st2-demo2', ide.language),
+              function (txt) {
+                  myself.droppedText(txt, 'Snap!Twitter example project');
+              }
+            );
+          }
+      );
+    });
     menu.addPair('Open...', 'openProjectsBrowser', '^O');
     menu.addPair('Save', "save", '^S');
     menu.addItem('Save As...', 'saveProjectsBrowser');

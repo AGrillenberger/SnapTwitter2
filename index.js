@@ -110,8 +110,8 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/snap/SnapTwitter/st2-project/:lang', function(req, res) {
-  file = fs.readFileSync('snap/SnapTwitter/st2-project-tpl.xml','utf8');
+app.use('/snap/SnapTwitter/:file/:lang', function(req, res) {
+  file = fs.readFileSync('snap/SnapTwitter/' + req.params.file + '-tpl.xml','utf8');
   blocks = fs.readFileSync('snap/SnapTwitter/st2-blocks.xml','utf8');
   blocks = blocks.replace(/<blocks\sapp=[^>]*>/,"").replace('</blocks>',"");
   file = file.replace("%%%ST2-BLOCKS-GO-HERE%%%", blocks);

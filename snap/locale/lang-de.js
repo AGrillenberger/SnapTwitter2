@@ -850,10 +850,14 @@ SnapTranslator.dict.de = {
         'Projektanmerkungen...',
     'New':
         'Neu',
-    'New example project':
-        'Neues Beispielprojekt',
+    'Reload tutorial':
+        'Tutorialprojekt neu laden',
     'New empty project':
         'Neues leeres Projekt',
+    'Load demo project 1 (language map)':
+        'Demoprojekt 1 (Sprachen auf Karte) laden',
+    'Load demo project 2 (language chart)':
+            'Demoprojekt 2 (Sprachen als Diagramm) laden',
     'Open...':
         '\u00d6ffnen...',
     'Save':

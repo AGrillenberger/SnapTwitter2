@@ -1,0 +1,165 @@
+<project name="Demoprojekt2-Sprachen-Diagramm" app="Snap!Twitter 2.0 based on Snap! 5.0, http://snaptwitter.dataliteracy.education" version="1">
+  <notes></notes>
+  <thumbnail>data:image/png;base64,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</thumbnail>
+  <stage name="Bühne" width="480" height="360" costume="0" color="255,255,255,1" tempo="60" threadsafe="false" volume="100" pan="0" lines="round" ternary="false" codify="false" inheritance="true" sublistIDs="false" scheduled="false" id="1">
+    <pentrails>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeAAAAFoCAYAAACPNyggAAAOhUlEQVR4Xu3VwQkAAAjEMN1/abewn7jAQRC64wgQIECAAIF3gX1fNEiAAAECBAiMAHsCAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQICLAfIECAAAECgYAAB+gmCRAgQICAAPsBAgQIECAQCAhwgG6SAAECBAgIsB8gQIAAAQKBgAAH6CYJECBAgIAA+wECBAgQIBAICHCAbpIAAQIECAiwHyBAgAABAoGAAAfoJgkQIECAgAD7AQIECBAgEAgIcIBukgABAgQIHLFxAWmhEwHPAAAAAElFTkSuQmCC</pentrails>
+    <costumes>
+      <list struct="atomic" id="2"></list>
+    </costumes>
+    <sounds>
+      <list struct="atomic" id="3"></list>
+    </sounds>
+    <variables></variables>
+    <blocks></blocks>
+    <scripts></scripts>
+    <sprites>
+      <sprite name="Objekt" idx="1" x="0" y="0" heading="90" scale="1" volume="100" pan="0" rotation="1" draggable="true" costume="0" color="80,80,80,1" pen="tip" id="8">
+        <costumes>
+          <list struct="atomic" id="9"></list>
+        </costumes>
+        <sounds>
+          <list struct="atomic" id="10"></list>
+        </sounds>
+        <blocks></blocks>
+        <variables></variables>
+        <scripts>
+          <script x="39" y="33">
+            <block s="receiveGo"></block>
+            <block s="doDeclareVariables">
+              <list>
+                <l>Anzahlen</l>
+              </list>
+              <comment w="378.000001" collapsed="false">Variable zum Speichern der Anzahlen</comment>
+            </block>
+            <block s="doSetVar">
+              <l>Anzahlen</l>
+              <block s="reportNewList">
+                <list>
+                  <l>0</l>
+                  <l>0</l>
+                  <l>0</l>
+                  <l>0</l>
+                </list>
+              </block>
+              <comment w="353.000001" collapsed="false">Liste zum Speichern der Anzahlen (Position 1: EN, 2: DE, 3: FR, 4: Sonstige)</comment>
+            </block>
+            <custom-block s="🐦 for each %upvar %cs">
+              <l>🐦 tweet</l>
+              <script>
+                <block s="doIfElse">
+                  <block s="reportEquals">
+                    <custom-block s="🐦 attribute %s from tweet %obj">
+                      <l>lang</l><l/></custom-block>
+                    <l>en</l>
+                    <comment w="245" collapsed="false">Prüfen ob Sprache Englisch</comment>
+                  </block>
+                  <script>
+                    <custom-block s="erhöhe Element %n von Liste %l um %n">
+                      <l>1</l><block var="Anzahlen"/>
+                      <l>1</l>
+                      <comment w="224" collapsed="false">Hochzählen des ersten Listenelements um 1</comment>
+                    </custom-block>
+                  </script>
+                  <script>
+                    <block s="doIfElse">
+                      <block s="reportEquals">
+                        <custom-block s="🐦 attribute %s from tweet %obj">
+                          <l>lang</l><l/></custom-block>
+                        <l>de</l>
+                        <comment w="247" collapsed="false">Sprache nicht Englisch - Prüfung ob Deutsch</comment>
+                      </block>
+                      <script>
+                        <custom-block s="erhöhe Element %n von Liste %l um %n">
+                          <l>2</l><block var="Anzahlen"/>
+                          <l>1</l>
+                          <comment w="224" collapsed="false">Hochzählen des zweiten Listenelements um 1</comment>
+                        </custom-block>
+                      </script>
+                      <script>
+                        <block s="doIfElse">
+                          <block s="reportEquals">
+                            <custom-block s="🐦 attribute %s from tweet %obj">
+                              <l>lang</l><l/></custom-block>
+                            <l>fr</l>
+                            <comment w="372" collapsed="false">Sprache nicht Englisch od. Deutsch - Prüfung ob Französisch</comment>
+                          </block>
+                          <script>
+                            <custom-block s="erhöhe Element %n von Liste %l um %n">
+                              <l>3</l><block var="Anzahlen"/>
+                              <l>1</l>
+                              <comment w="224" collapsed="false">Hochzählen des dritten Listenelements um 1</comment>
+                            </custom-block>
+                          </script>
+                          <script>
+                            <custom-block s="erhöhe Element %n von Liste %l um %n">
+                              <l>4</l><block var="Anzahlen"/>
+                              <l>1</l>
+                              <comment w="224" collapsed="false">Hochzählen des vierten Listenelements um 1</comment>
+                            </custom-block>
+                          </script>
+                        </block>
+                      </script>
+                    </block>
+                  </script>
+                </block>
+                <custom-block s="📊create chart %cs">
+                  <script>
+                    <custom-block s="📊 bar chart: values %l labels %l name %txt colors %l"><block var="Anzahlen"/>
+                      <block s="reportNewList">
+                        <list>
+                          <l>Englisch</l>
+                          <l>Deutsch</l>
+                          <l>Französisch</l>
+                          <l>Sonstige</l>
+                        </list>
+                      </block>
+                      <l>Sprachen</l>
+                      <block s="reportNewList">
+                        <list>
+                          <l>blue</l>
+                          <l>red</l>
+                          <l>green</l>
+                          <l>orange</l>
+                        </list>
+                      </block>
+                    </custom-block>
+                  </script>
+                  <comment w="90" collapsed="false">Aktualisieren des Diagramms</comment>
+                </custom-block>
+              </script>
+            </custom-block>
+          </script>
+          <script x="47" y="512">
+            <block s="receiveKey">
+              <l>
+                <option>space</option>
+              </l>
+            </block>
+            <block s="doStopThis">
+              <l>
+                <option>all but this script</option>
+              </l>
+            </block>
+          </script>
+        </scripts>
+      </sprite>
+    </sprites>
+  </stage>
+  <hidden></hidden>
+  <headers></headers>
+  <code></code>
+  <blocks>
+    %%%ST2-BLOCKS-GO-HERE%%%
+  </blocks>
+  <variables>
+    <variable name="server">
+      <l>https://snaptwitter.dataliteracy.education</l>
+    </variable>
+    <variable name="user">
+      <l>IMS2022</l>
+    </variable>
+    <variable name="password">
+      <l>snaptwitter</l>
+    </variable>
+  </variables>
+</project>
