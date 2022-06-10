@@ -150,6 +150,23 @@
   <code></code>
   <blocks>
     %%%ST2-BLOCKS-GO-HERE%%%
+    <block-definition s="erhöhe Element %&apos;x&apos; von Liste %&apos;l&apos; um %&apos;n&apos;" type="command" category="lists">
+      <header></header>
+      <code></code>
+      <translations></translations>
+      <inputs>
+        <input type="%n">1<options>1&#xD;2&#xD;3&#xD;4&#xD;5&#xD;6&#xD;7&#xD;8&#xD;9&#xD;10</options>
+        </input>
+        <input type="%l"></input>
+        <input type="%n">1</input>
+      </inputs>
+      <script>
+        <block s="doReplaceInList"><block var="x"/><block var="l"/>
+          <block s="reportSum">
+            <block s="reportListItem"><block var="x"/><block var="l"/></block><block var="n"/></block>
+        </block>
+      </script>
+    </block-definition>
   </blocks>
   <variables>
     <variable name="server">
